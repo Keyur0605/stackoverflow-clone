@@ -9,7 +9,7 @@ const Header = () => {
   const logout = (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:8000/logout', {
+    fetch(`${process.env.REACT_APP_LINK}/logout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

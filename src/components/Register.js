@@ -27,7 +27,7 @@ const Register = () => {
      
      
         action.resetForm()
-        fetch("http://localhost:8000/register",{
+        fetch(`${process.env.REACT_APP_LINK}/register`,{
           method:"POST",
           headers:{
             "content-type":"application/json"
@@ -40,7 +40,16 @@ const Register = () => {
             navigate('/login')
           }
           else if(response.status === 400){
-            alert("bad request")
+            toast.error(msg.msg, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              });
           }
           else if(response.status === 409){
             toast.error(msg.msg, {

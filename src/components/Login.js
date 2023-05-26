@@ -26,7 +26,7 @@ const Login = () => {
     onSubmit: (values, action) => {
 
       action.resetForm()
-      fetch("http://localhost:8000/login", {
+      fetch(`${process.env.REACT_APP_LINK}/login`, {
         method: "POST",
 
         headers: {
@@ -35,7 +35,6 @@ const Login = () => {
         body: JSON.stringify(values)
       }).then(async (response) => {
         const token = await response.json()
-        console.log(token,"token for login");
         if(response.status === 201){
           let user = token.name
           cookies.set('jwt', token.token, { path: ' /' })
@@ -65,11 +64,11 @@ const Login = () => {
     }
   })
 
-  const google = (e) => {
-    e.preventDefault()
-    window.open("http://localhost:8000/auth/google", "_self");
+  // const google = (e) => {
+  //   e.preventDefault()
+  //   window.open("http://localhost:8000/auth/google", "_self");
 
-  }
+  // }
 
 
   // const github=(e)=>{
@@ -98,7 +97,7 @@ const Login = () => {
               <button type="submit" className='btn btn-primary mt-4'>Login</button>
 
             </form>
-            <button className="btn  btn-block text-uppercase d-block my-3" onClick={google} style={{ color: "white", backgroundColor: "#ea4335" }}><i className="fab fa-google mr-2"></i> Sign in with Google</button>
+            <button className="btn  btn-block text-uppercase d-block my-3"  style={{ color: "white", backgroundColor: "#ea4335" }}><i className="fab fa-google mr-2"></i> Sign in with Google</button>
             <button className="btn   btn-block text-uppercase d-block my-3" style={{ color: "white", backgroundColor: "#3b5998" }} ><i className="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
             <button className="btn  btn-primary  btn-block text-uppercase d-block my-3"  ><i className="fab fa-facebook-f mr-2"></i> Sign in with LinkedIn</button>
             <button className="btn  btn-dark  btn-block text-uppercase d-block my-3"   ><i className="fab fa-facebook-f mr-2"></i> Sign in with GitHub</button>

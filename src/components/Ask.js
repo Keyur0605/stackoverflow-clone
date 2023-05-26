@@ -18,7 +18,7 @@ function Ask() {
   const navigate=useNavigate()
   const data = async () => {
     let getadat = []
-    const api = await fetch('http://localhost:8000/tags/name')
+    const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
     const response = await api.json()
     for (let index = 0; index < response.length; index++) {
       let a = response[index]
@@ -62,7 +62,7 @@ function Ask() {
     }
     else {
       const item = { title, description, image, tags }
-      fetch('http://localhost:8000/question/add', {
+      fetch(`${process.env.REACT_APP_LINK}/question/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -5,31 +5,45 @@ import { CirclesWithBar } from 'react-loader-spinner'
 import "./Ask.css"
 const Question = () => {
   const navigate = useNavigate()
-  const username = JSON.parse(localStorage.getItem("user"))
-  const token = username.token
-
+  
   const [question, setQuestion] = useState([])
   const[show,setShow]=useState(false)
+  const [token,setToken]=useState('')
   const ask = () => {
     navigate('/ask')
   }
 
-  const getQuestion = async () => {
-    const data = await fetch('http://localhost:8000/question/user', {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `${token}`
-      }
-    })
-    const response = await data.json()
 
-    setQuestion(response)
-  }
+  useEffect(()=>{
+    if(!localStorage.getItem("user")){
+      navigate('/login')
+    }
+    else{
+      const username = JSON.parse(localStorage.getItem("user"))
+      // const token = username.token
+      setToken(username.token)
+    }
+
+  },[])
+  console.log(token,"token for user");
+    
+      const getQuestion = async () => {
+        const data = await fetch(`${process.env.REACT_APP_LINK}/question/user`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `${token}`
+          }
+        })
+        console.log(token,"wertyuio");
+        const response = await data.json()
+    
+        setQuestion(response)
+      }
 
   useEffect(() => {
     getQuestion()
-  }, [])
+  }, [token])
 
   const hideshow=(id)=>{
     setShow(id)

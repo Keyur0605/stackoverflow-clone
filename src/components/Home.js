@@ -7,15 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { NavLink } from 'react-router-dom';
 
 const Home = () => {
-  const username= JSON.parse(localStorage.getItem("user"))
-  const token=username.token
+ 
   // const [qId, setQId] = useState('')
   // const [text, setText] = useState('')
   const [loader, setLoader] = useState(false)
 
   const [question, setQuestion] = useState([])
   const getQuestion = async () => {
-    const data = await fetch('http://localhost:8000/question/list', {
+    const data = await fetch(`${process.env.REACT_APP_LINK}/question/list`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

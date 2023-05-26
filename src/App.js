@@ -9,6 +9,7 @@ import Register from './components/Register';
 import Protectrd from './components/Protectrd'
 import Tag from './components/Tag';
 import Ask from './components/Ask';
+import ErrorPage from './components/ErrorPage';
 import SingleQuestion from './components/SingleQuestion';
 import { BrowserRouter,NavLink,Route,Routes } from "react-router-dom";
 
@@ -24,15 +25,11 @@ function App() {
        <Route path='/' element={<Home/>}></Route>
       <Route path='/question' element={<Protectrd Cmp={Question}/>}></Route> 
       <Route path='/question/:id' element={<SingleQuestion/>}></Route> 
-       {/* <Route path='/' element={<Home/>}></Route>
-      <Route path='/question' element={<Question/>}></Route>  */}
-
       <Route path='/register' element={<Register/>}></Route>
-      
       <Route path="/login" element={<Login/>}/>
-      <Route path="/tag" element={<Tag/>}/>
-      <Route path="/ask" element={<Ask/>}/>
-      <Route path="/*" element={<> <h1>404 Page Not Found </h1> <NavLink to="/">Back To Home page</NavLink></>}/>
+      <Route path="/tag" element={<Protectrd Cmp={Tag}/>}/>
+      <Route path="/ask" element={<Protectrd Cmp={Ask}/>}/>
+      <Route path="/*" element={<ErrorPage/>}/>
   
  
     </Routes>

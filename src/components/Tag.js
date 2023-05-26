@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Header from './Header'
 import "./Ask.css"
 const Tag = () => {
+
+  
   const [tags, setTags] = useState([])
   const data = async () => {
-    const api = await fetch('http://localhost:8000/tags')
+    const api = await fetch(`${process.env.REACT_APP_LINK}/tags`)
     const response = await api.json()
     setTags(response)
   }

@@ -57,7 +57,7 @@
     background: #f1f2f3;
     font-weight: bold;
     padding: 10px;
-     border-radius: 10px
+    border-radius: 10px
 }
 
 .tag-home{
@@ -81,4 +81,20 @@
     font-weight: 500;
     padding: 10px;
     border-radius: 10px;
+}
+.specific-commit{
+    border-bottom: 1px solid #f1f2f3;
+}
+.username-commit{
+  
+   font-size: 13px; 
+   font-weight: 600;
+   
+    border-radius: 10px
+}
+
+.commit-answer{
+    font-size: 12px;
+    cursor: pointer;
+    color: blue;
 }
