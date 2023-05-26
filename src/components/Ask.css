@@ -1,0 +1,84 @@
+.main-box {
+    padding: 30px;
+    width: 100%;
+    margin-top: 40px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+.center-box {
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.asdf {
+    height: 8.2rem;
+    overflow-y: auto;
+}
+
+
+.asdf::-webkit-scrollbar {
+    width: 4px;
+}
+
+.asdf::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #c0c0c0;
+}
+
+
+
+.backgroundHeader{
+    background-color: #f8f9fa !important;
+    color: black !important;
+    border-radius: 15px;
+    text-transform: capitalize !important;
+    padding:20px 10px;
+}
+.heightForTitle{
+    height: 50px;
+    display: flex;
+    align-items: center;
+
+}
+.heightForTitle h5{
+    margin-bottom: 0px;
+}
+.description{
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.username{
+    background: #f1f2f3;
+    font-weight: bold;
+    padding: 10px;
+     border-radius: 10px
+}
+
+.tag-home{
+    background: #e1ecf4;
+     display: inline-block;
+     padding: 10px 15px;
+     border-radius: 10px;
+     color: #39739d
+}
+
+.navlink-home{
+
+    text-decoration: none;
+    color: black;
+    font-size: 24px;
+}
+.title-home{
+
+    text-decoration: none;
+    background: #f1f2f3;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 10px;
+}
