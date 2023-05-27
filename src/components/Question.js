@@ -5,7 +5,6 @@ import { CirclesWithBar } from 'react-loader-spinner'
 import "./Ask.css"
 const Question = () => {
   const navigate = useNavigate()
-  
   const [question, setQuestion] = useState([])
   const[show,setShow]=useState(false)
   const [token,setToken]=useState('')
@@ -13,19 +12,16 @@ const Question = () => {
     navigate('/ask')
   }
 
-
   useEffect(()=>{
     if(!localStorage.getItem("user")){
       navigate('/login')
     }
     else{
       const username = JSON.parse(localStorage.getItem("user"))
-      // const token = username.token
       setToken(username.token)
     }
 
   },[])
-  console.log(token,"token for user");
     
       const getQuestion = async () => {
         const data = await fetch(`${process.env.REACT_APP_LINK}/question/user`, {
@@ -35,9 +31,8 @@ const Question = () => {
             "Authorization": `${token}`
           }
         })
-        console.log(token,"wertyuio");
+        
         const response = await data.json()
-    
         setQuestion(response)
       }
 
@@ -61,44 +56,51 @@ const Question = () => {
             <button onClick={ask} className='btn btn-primary d-flex justify-content-end'>Ask Question</button>
           </div>
           <div className="col-8 mt-3 mx-auto">
-            {
-              !question.length ? <div style={{ height: "75vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <CirclesWithBar
-                height="100"
-                width="100"
-                color="#0d6efd"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-                outerCircleColor=""
-                innerCircleColor=""
-                barColor=""
-                ariaLabel='circles-with-bar-loading'
-              /></div>
-               : question.map((val, index) => {
-                const { _id, title, description, image, tags } = val
-                return (
-                 
-                      <div className="my-4 card " key={index + 1}>
-                        <div className="d-flex backgroundHeader">
-                          <div className="col-11 heightForTitle">
-                            <h5>{title}</h5>
+            {}
+             {
+                !question.length ? <div style={{ height: "75vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <CirclesWithBar
+                  height="100"
+                  width="100"
+                  color="#0d6efd"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                  outerCircleColor=""
+                  innerCircleColor=""
+                  barColor=""
+                  ariaLabel='circles-with-bar-loading'
+                />
+                
+                
+                </div>
+                 : 
+                 question.map((val, index) => {
+                  const { _id, title, description, image, tags } = val
+                  return (
+                   
+                        <div className="my-4 card " key={index + 1}>
+                          <div className="d-flex backgroundHeader">
+                            <div className="col-11 heightForTitle">
+                              <h5>{title}</h5>
+                            </div>
+                            <div className="col-1">
+                              <button className='btn btn-light' onClick={()=>hideshow(_id)}>➕</button>
+                            </div>
                           </div>
-                          <div className="col-1">
-                            <button className='btn btn-light' onClick={()=>hideshow(_id)}>➕</button>
-                          </div>
+                      { _id === show  && <div >
+                          <p className='description my-3'>{description}</p>
+                          <div className='p-3'><img src={image} alt=" Code" width="100%" /></div>
+                          <div className='mt-4' >{tags.map((tag, tIndex) => <span className='mx-3 tag-home'  key={tIndex}>{tag}</span>)}</div>
+                          <button  className='btn btn-danger my-3 me-3 d-block ms-auto' onClick={()=> setShow(false) }>Show Less</button>
                         </div>
-                    { _id === show  && <div >
-                        <p className='description my-3'>{description}</p>
-                        <div className='p-3'><img src={image} alt=" Code" width="100%" /></div>
-                        <div className='mt-4' >{tags.map((tag, tIndex) => <span className='mx-3 tag-home'  key={tIndex}>{tag}</span>)}</div>
-                        <button  className='btn btn-danger my-3 me-3 d-block ms-auto' onClick={()=> setShow(false) }>Show Less</button>
+                      }
                       </div>
-                    }
-                    </div>
-                )
-              })
-            }
+                  )
+                })
+              }
+            
+            
           </div>
         </div>
       </div>  

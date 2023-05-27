@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, NavLink } from 'react-router-dom'
-import "./Ask.css"
+import Header from './Header';
+ import "./Ask.css"
 import { CirclesWithBar } from 'react-loader-spinner'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2'
 const SingleQuestion = () => {
   const { id } = useParams()
   const [text, setText] = useState('')
   const [commitDisplayText, setCommitDisplayText] = useState('')
   const [answerDisplayText, setAnswerDisplayText] = useState('')
+  // const [answerCommitDisplayText, setAnswerCommitDisplayText] = useState('')
   const [questionData, setQuestionData] = useState('')
   const [questionAnswer, setQuestionAnswer] = useState('')
   const [loader, setLoader] = useState(false)
   const [ques_id, setQues_id] = useState('')
   const [show, setShow] = useState(false)
   const [answerShow, setAnswerShow] = useState(false)
+  // const [answerCommitShow, setAnswerCommitShow] = useState(false)
   const [commitError, setCommitError] = useState(true)
   const [answerError, setAnswerError] = useState(true)
   const [name, setName] = useState()
+  const[answerCommit,setAnswerCommit]=useState('')
+  const[answerCommitId,setAnswerCommitId]=useState('')
   
   const navigate = useNavigate()
 
@@ -46,7 +53,6 @@ const SingleQuestion = () => {
 
     }
     else {
-      // const user_name = JSON.parse(localStorage.getItem("user"))
       const username = JSON.parse(localStorage.getItem("user"))
       const token = username.token
       const u_name = username.user
@@ -131,6 +137,66 @@ const SingleQuestion = () => {
     }
   }
 
+
+  const addAnswerCommit=()=>{
+    if (!localStorage.getItem("user")) {
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      })
+
+      swalWithBootstrapButtons.fire({
+        title: 'You are not Login?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Login To Continue',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login')
+        }
+      })
+
+    }
+    else {
+      const username = JSON.parse(localStorage.getItem("user"))
+      const token = username.token
+      const item={text:answerCommit , ans_id:answerCommitId}
+      fetch(`${process.env.REACT_APP_LINK}/answercommit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `${token}`
+        },
+        body: JSON.stringify(item)
+      }).then((response) => {
+        if (response.status === 201) {
+          toast.success('Your Commit is Added ', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+          setAnswerCommit("")
+        }
+        else if (response.status === 400) {
+       alert("Plaese Fill Commit Section")
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+
+    }
+
+  }
  
 
 
@@ -140,7 +206,6 @@ const SingleQuestion = () => {
       method: "GET"
     }).then(async (response) => {
       const data = await response.json()
-      console.log(data, "data");
       setQuestionData(data)
       setQues_id(data.data._id)
       setLoader(true)
@@ -157,10 +222,10 @@ const SingleQuestion = () => {
 
   }, [])
 
-
+  
   return (
     <div>
-
+<Header/>
       <div className="container">
         <div className="row">
           <div className="col-10 mx-auto">
@@ -213,7 +278,7 @@ const SingleQuestion = () => {
                       }
                       {show && commitError ? <><div className='d-flex justify-content-between'>
                         <p className='ms-1 mt-3'>{commitDisplayText}</p>
-                        <p className='username-commit me-4  my-2'> Commit by: <span className='text-capitalize mt-3' style={{ fontWeight: "normal" }}>{name}</span></p>
+                        <p className='username-commit me-4  my-2'> Commit by: <span className='text-capitalize mt-3' style={{ fontWeight: "normal",color: "red"  }}>{name}</span></p>
 
                       </div> </> : ""}
                     </div>
@@ -238,21 +303,39 @@ const SingleQuestion = () => {
                     <div className="col-12 ">
                       {
                         questionData.answers.map((val, index) => {
+                          const{ans_commits}=val
+                         
                           return (
                             <>
-                              <div className='specific-commit'>
-
-                                <div className=" d-flex justify-content-between" key={index}>
-
+                              <div className='specific-commit' key={index}>
+                                <div className=" d-flex justify-content-between" >
                                   <p className='ms-2 my-2 '>{val.text}</p>
-                                  <p className='username-commit me-4  my-2'> Answer by: <span className='text-capitalize mt-3' style={{ fontWeight: "normal" }}>{val.userName}</span></p>
-
+                                  <p className='username-commit me-4  my-2'> Answer by: <span className='text-capitalize mt-3' style={{ fontWeight: "normal",color: "red"  }}>{val.userName}</span></p>
                                 </div>
-                                <p className='mb-2 ps-2 commit-answer'data-bs-toggle="modal" data-bs-target="#exampleModal" >Add To Commit</p>
+                                <p className='mb-2 ps-2 commit-answer'data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={()=>setAnswerCommitId(val._id)} >Add To Commit</p>
+
+                                {/* answers commits */}
+                                {
+                                  ans_commits.map((val,index)=>{
+                                    const {text,userName}=val
+                                    return(
+                                      <>
+                                      <div className="col-11  answer_commit offset-1" key={index}>
+                                      <div className=" d-flex justify-content-between  mx-3" >
+                                    
+                                  <p className='ms-5 my-1 ' style={{fontSize:"13px"}}>{text}</p>
+                                  <p className='answer-commit me-4  my-2'> Commit by: <span className='text-capitalize mt-3' style={{ fontWeight: "normal",color: "blue"  }}>{userName}</span></p>
+                                </div>
+                                </div>
+                                      </>
+                                    )
+                                  })
+                                }
+                                
                               </div>
                             
 
-                             
+                             {/* Answer Commit */}
                               <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div className="modal-dialog modal-dialog-centered">
                                   <div className="modal-content">
@@ -261,11 +344,11 @@ const SingleQuestion = () => {
                                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div className="modal-body">
-                                    <textarea className="form-control" name='text' placeholder='Add Your Commit'  rows="3"></textarea>
+                                    <textarea className="form-control" name='text' value={answerCommit} onChange={(e)=>setAnswerCommit(e.target.value)} placeholder='Add Your Commit'  rows="3"></textarea>
                                     </div>
                                     <div className="modal-footer">
                                       <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                      <button type="button" className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Save changes</button>
+                                      <button type="button" className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close" onClick={addAnswerCommit}>Add Commit</button>
                                     </div>
                                   </div>
                                 </div>
@@ -278,7 +361,7 @@ const SingleQuestion = () => {
 
                     {answerShow && answerError ? <><div className='d-flex justify-content-between'>
                       <p className='ms-1 mt-3'>{answerDisplayText}</p>
-                      <p className='username-commit me-4  my-2'> Answer by: <span className='text-capitalize mt-3' style={{ fontWeight: "normal" }}>{name}</span></p>
+                      <p className='username-commit me-4  my-2'> Answer by: <span className='text-capitalize mt-3' style={{ fontWeight: "normal",color:"red" }}>{name}</span></p>
 
                     </div> </> : ""}
                   </div>
@@ -291,6 +374,7 @@ const SingleQuestion = () => {
                   </form>
 
                 </div>
+                <ToastContainer/>
               </div>
                 : <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <CirclesWithBar
@@ -307,7 +391,7 @@ const SingleQuestion = () => {
                   /></div>
             }
 
-            <NavLink style={{ textDecoration: "none" }} to="/" ><button className='btn btn-primary mb-3 mx-auto'>Back To Home Page</button></NavLink>
+            {/* <NavLink style={{ textDecoration: "none" }} to="/" ><button className='btn btn-primary mb-3 mx-auto'>Back To Home Page</button></NavLink> */}
           </div>
         </div>
       </div>

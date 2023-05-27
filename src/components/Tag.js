@@ -25,7 +25,7 @@ const Tag = () => {
                 const {name,description}=val
                 return (
                   <>
-                  <div className="col-3 mx-auto my-3" key={index}>
+                  <div className="col-3 mx-auto my-3" key={index+1}>
                     <div className="card" style={{width:"18rem"}}>
                       <div className="card-body">
                         <h6 className="card-title" style={{background:"#e1ecf4",display:"inline-block",padding:"10px",borderRadius:"10px",color:"#39739d"}}>{name}</h6>

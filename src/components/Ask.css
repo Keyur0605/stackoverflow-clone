@@ -35,7 +35,6 @@
 .backgroundHeader{
     background-color: #f8f9fa !important;
     color: black !important;
-    border-radius: 15px;
     text-transform: capitalize !important;
     padding:20px 10px;
 }
@@ -63,24 +62,20 @@
 .tag-home{
     background: #e1ecf4;
      display: inline-block;
-     padding: 10px 15px;
+     padding: 5px 7px;
      border-radius: 10px;
+    font-size: 13px;
      color: #39739d
 }
 
-.navlink-home{
 
-    text-decoration: none;
-    color: black;
-    font-size: 24px;
-}
 .title-home{
 
     text-decoration: none;
-    background: #f1f2f3;
-    font-weight: 500;
+    /* background: #f1f2f3; */
     padding: 10px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
+    border-bottom: 1px solid gray;
 }
 .specific-commit{
     border-bottom: 1px solid #f1f2f3;
@@ -93,8 +88,32 @@
     border-radius: 10px
 }
 
+.answer-commit{
+  
+    font-size: 12px; 
+    font-weight: 600;
+     border-radius: 10px
+ }
+
 .commit-answer{
     font-size: 12px;
     cursor: pointer;
     color: blue;
+   
 }
+
+.answer_commit{
+background: aliceblue;
+border-radius: 8px;
+border-bottom: 1px solid rgb(187, 186, 186);
+
+}
+.profile-home{
+    background: #e1ecf4;
+    display: inline-block;
+   padding: 7px;
+   font-size: 14px;
+    border-radius: 10px;
+    color: #39739d
+}
+

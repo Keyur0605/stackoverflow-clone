@@ -11,7 +11,9 @@ import Tag from './components/Tag';
 import Ask from './components/Ask';
 import ErrorPage from './components/ErrorPage';
 import SingleQuestion from './components/SingleQuestion';
-import { BrowserRouter,NavLink,Route,Routes } from "react-router-dom";
+import Profile from './components/Profile';
+import UpdateProfile from './components/UpdateProfile';
+import { BrowserRouter,Route,Routes } from "react-router-dom";
 
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
       <Route path="/login" element={<Login/>}/>
       <Route path="/tag" element={<Protectrd Cmp={Tag}/>}/>
       <Route path="/ask" element={<Protectrd Cmp={Ask}/>}/>
+      <Route path="/profile" element={<Protectrd Cmp={Profile}/>}/>
+      <Route path="/updateprofile" element={<Protectrd Cmp={UpdateProfile}/>}/>
       <Route path="/*" element={<ErrorPage/>}/>
   
  

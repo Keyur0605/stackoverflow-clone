@@ -7,14 +7,23 @@ import 'react-toastify/dist/ReactToastify.css';
 import { NavLink } from 'react-router-dom';
 
 const Home = () => {
- 
-  // const [qId, setQId] = useState('')
-  // const [text, setText] = useState('')
-  const [loader, setLoader] = useState(false)
 
-  const [question, setQuestion] = useState([])
+  const [loader, setLoader] = useState(false)
+  const [pageno, setPageNo] = useState(1)
+  const [question, setQuestion] = useState()
+  const prevpage = (e) => {
+    e.preventDefault()
+    if (pageno >= 2) {
+      setPageNo(pageno - 1)
+    }
+  }
+  const nextpage = (e) => {
+    e.preventDefault()
+    setPageNo(pageno + 1)
+  }
+
   const getQuestion = async () => {
-    const data = await fetch(`${process.env.REACT_APP_LINK}/question/list`, {
+    const data = await fetch(`${process.env.REACT_APP_LINK}/question/list/${pageno}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -23,37 +32,14 @@ const Home = () => {
     })
     const response = await data.json()
 
-    setQuestion(response)
+    setQuestion(response.allData)
     setLoader(true)
   }
   useEffect(() => {
     getQuestion()
-  }, [])
+  }, [pageno])
 
-  // const commitSend = (ques_id) => {
-  //   setQId(ques_id)
-  //   const item={text,ques_id}
-  //   console.log(item,"item");
-  //  fetch('http://localhost:8000/commit',{
-  //   method:"POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "Authorization": `${token}`
-  //   },
-  //   body:JSON.stringify(item)
-  //  }).then((response)=>{
-  //   console.log(response);
-  //   if(response.status === 201){
-  //     setText("")
-    
-  //   }
-  //   else if(response.status === 401){
-  //     setText('')
-  //   }
-  //  }).catch((error)=>{
-  //   console.log(error);
-  //  })
-  // }
+
 
   return (
     <div>
@@ -63,44 +49,31 @@ const Home = () => {
           <div className="row">
             <div className="col-9 my-4 mx-auto">
               {
-                !question.length 
-                ? 
-                <h3 style={{ height: "85vh", display: "flex", justifyContent: "center ", alignItems: "center" }}>No Question Available.</h3>
-                : 
-                question.map((val, index) => {
-                  const { _id, title } = val
-                  return (
-                    // <div className="card my-3" key={index}>
-                    //   <div className="card-body">
-                    //     <div className='d-flex justify-content-between'>
-                    //       <div>
-                    //         <label className='username'>Question Title</label>
-                    //       </div>
-                    //       <div className='d-flex'>
-                    //         <span  className='username'> UserName: <span className='text-capitalize' style={{ fontWeight: "normal" }}> {user_name}</span></span>
-                    //       </div>
+                !question.length
+                  ?
+                  <h3 style={{ height: "85vh", display: "flex", justifyContent: "center ", alignItems: "center" }} >No Question Available.</h3>
+                  :
+                  question.map((val, index) => {
+                    const { _id, title } = val
+                    return (
 
-                    //     </div>
-                    //     <p style={{ fontSize: "30px" }} className='text-capitalize'>{title}</p>
-                    //     <label className='mb-1 username' >Question Description</label>
-                    //     <p className='text-capitalize'>{description}</p>
-                    //     <img src={image} alt='code' width="500px" />
-                    //     <div className='mt-3' >{tags.map((tag, tIndex) => <span className='me-3 tag-home' key={tIndex}>{tag}</span>)}</div>
-
-                    //     <form className='mt-3' >
-                    //       { _id === qId &&<textarea className="form-control" name='text'  placeholder='Add Your Commite' value={text} onChange={(e) => setText(e.target.value)} rows="3"></textarea>}
-                    //       <a  className='btn btn-primary mt-2' onClick={() => commitSend(_id)}>Add Your Commit</a>
-                    //     </form>
-                    //   </div>
-                    // </div>
-
-                   <NavLink to={`/question/${_id}`} className="navlink-home" key={index} >
-                    <p className='text-capitalize title-home'>{title}</p>
-                    
-                    </NavLink>
-                  )
-                })
+                      <>
+                        <div className="title-home my-2" key={index}>
+                          <NavLink to={`/question/${_id}`} style={{ textDecoration: "none", color: "black", fontSize: "21px" }}  >
+                            <p className='text-capitalize question-title'>{title}</p>
+                          </NavLink>
+                          <p >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum sequi minus perspiciatis voluptas tenetur ea ut, necessitatibus alias quaerat nesciunt!</p>
+                          <span className='tag-home'>html</span>
+                        </div>
+                      </>
+                    )
+                  })
               }
+              <div className='d-flex justify-content-end'>
+                <button className='btn btn-primary me-2' onClick={prevpage}>Prev</button>
+                <span className='mt-2' style={{ fontSize: "17px" }}>{pageno}</span>
+                <button className='btn btn-primary ms-2' onClick={nextpage}>Next</button>
+              </div>
             </div>
           </div>
           <ToastContainer />

@@ -42,8 +42,8 @@ const Header = () => {
                   <NavLink to="/question" className="mx-3" style={{ textDecoration: "none", color: "black", marginTop: "6px" }}>Question</NavLink>
                   <NavLink to="/tag" className="mx-3" style={{ textDecoration: "none", color: "black", marginTop: "6px" }}>Tag</NavLink>
                 <div  style={{position:"fixed",top:"9px",right:"20px"}}>
-                  <span className='text-capitalize mt-1 me-4' style={{fontSize:"20px",color:"purple"}}>{username.user}</span>
-                 <button className='btn btn-primary' onClick={logout} >Logout</button>
+                 <NavLink to="/profile"><button className='btn btn-primary me-3'>Profile</button></NavLink>
+                 <button className='btn btn-danger' onClick={logout} >Logout</button>
                  </div>
                 </>
 
