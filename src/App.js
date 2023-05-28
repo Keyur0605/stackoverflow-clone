@@ -1,4 +1,3 @@
-
 import './App.css';
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle"
@@ -16,13 +15,9 @@ import UpdateProfile from './components/UpdateProfile';
 import { BrowserRouter,Route,Routes } from "react-router-dom";
 
 function App() {
-
-
-  
   return (
    <>
     <BrowserRouter>
-    
     <Routes>
        <Route path='/' element={<Home/>}></Route>
       <Route path='/question' element={<Protectrd Cmp={Question}/>}></Route> 
@@ -34,12 +29,9 @@ function App() {
       <Route path="/profile" element={<Protectrd Cmp={Profile}/>}/>
       <Route path="/updateprofile" element={<Protectrd Cmp={UpdateProfile}/>}/>
       <Route path="/*" element={<ErrorPage/>}/>
-  
- 
     </Routes>
     </BrowserRouter>
    </>
   )
 }
-
 export default App;

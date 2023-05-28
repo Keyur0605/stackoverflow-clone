@@ -11,14 +11,12 @@ const SingleQuestion = () => {
   const [text, setText] = useState('')
   const [commitDisplayText, setCommitDisplayText] = useState('')
   const [answerDisplayText, setAnswerDisplayText] = useState('')
-  // const [answerCommitDisplayText, setAnswerCommitDisplayText] = useState('')
   const [questionData, setQuestionData] = useState('')
   const [questionAnswer, setQuestionAnswer] = useState('')
   const [loader, setLoader] = useState(false)
   const [ques_id, setQues_id] = useState('')
   const [show, setShow] = useState(false)
   const [answerShow, setAnswerShow] = useState(false)
-  // const [answerCommitShow, setAnswerCommitShow] = useState(false)
   const [commitError, setCommitError] = useState(true)
   const [answerError, setAnswerError] = useState(true)
   const [name, setName] = useState()
@@ -26,7 +24,6 @@ const SingleQuestion = () => {
   const[answerCommitId,setAnswerCommitId]=useState('')
   
   const navigate = useNavigate()
-
 
   const commitSend = async () => {
     if (!localStorage.getItem("user")) {
@@ -137,7 +134,6 @@ const SingleQuestion = () => {
     }
   }
 
-
   const addAnswerCommit=()=>{
     if (!localStorage.getItem("user")) {
       const swalWithBootstrapButtons = Swal.mixin({
@@ -163,6 +159,7 @@ const SingleQuestion = () => {
 
     }
     else {
+  
       const username = JSON.parse(localStorage.getItem("user"))
       const token = username.token
       const item={text:answerCommit , ans_id:answerCommitId}
@@ -186,6 +183,7 @@ const SingleQuestion = () => {
             theme: "colored",
             });
           setAnswerCommit("")
+         
         }
         else if (response.status === 400) {
        alert("Plaese Fill Commit Section")
@@ -198,9 +196,6 @@ const SingleQuestion = () => {
 
   }
  
-
-
-
   const getQuestionData = () => {
     fetch(`${process.env.REACT_APP_LINK}/question/${id}`, {
       method: "GET"
@@ -213,9 +208,6 @@ const SingleQuestion = () => {
       console.log(error, "Error");
     })
   }
-
-
-
 
   useEffect(() => {
     getQuestionData()
@@ -325,6 +317,7 @@ const SingleQuestion = () => {
                                     
                                   <p className='ms-5 my-1 ' style={{fontSize:"13px"}}>{text}</p>
                                   <p className='answer-commit me-4  my-2'> Commit by: <span className='text-capitalize mt-3' style={{ fontWeight: "normal",color: "blue"  }}>{userName}</span></p>
+                                  
                                 </div>
                                 </div>
                                       </>
