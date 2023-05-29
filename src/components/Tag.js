@@ -5,22 +5,44 @@ const Tag = () => {
 
   
   const [tags, setTags] = useState([])
+  const [noData,setNoData]=useState(false)
   const data = async () => {
-    const api = await fetch(`${process.env.REACT_APP_LINK}/tags`)
-    const response = await api.json()
-    setTags(response)
+    try {
+      const api = await fetch(`${process.env.REACT_APP_LINK}/tags`)
+      const response = await api.json()
+      setTags(response)
+      console.log(response);
+      
+    } 
+    catch (error) {
+      console.log(error);
+      setNoData(true)
+    }
   }
+
+  // const getTag=(name)=>{
+  //   fetch(`${process.env.REACT_APP_LINK}/tags/${name}/${pageNo}`,{
+  //     method:"GET"
+  //   }).then(async(responce)=>{
+  //     // console.log(responce);
+  //    const data= await responce.json()
+  //    console.log(data);
+      
+  //     navigate('/')
+  //   })
+  // }
   
   useEffect(() => {
      data()
   }, [])
+ 
   return (
     <div>
       <Header />
       <div className="container">
         <div className="row">
          
-            {
+            { noData ?  <h3 style={{ height: "80vh", display: "flex", justifyContent: "center ", alignItems: "center" }} >No Tags Available.</h3>  :
               tags.map((val, index) => {
                 const {name,description}=val
                 return (
@@ -28,7 +50,7 @@ const Tag = () => {
                   <div className="col-3 mx-auto my-3" key={index+1}>
                     <div className="card" style={{width:"18rem"}}>
                       <div className="card-body">
-                        <h6 className="card-title" style={{background:"#e1ecf4",display:"inline-block",padding:"10px",borderRadius:"10px",color:"#39739d"}}>{name}</h6>
+                      <h6 className="card-title" style={{background:"#e1ecf4",display:"inline-block",padding:"10px",borderRadius:"10px",color:"#39739d",cursor:"pointer"}}>{name}</h6>
                         <div className='asdf'>
                         <p className="card-text" style={{fontSize:"15px"}}>{description}</p>
                         </div>

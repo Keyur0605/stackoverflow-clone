@@ -9,13 +9,18 @@ const Profile = () => {
     const navigate = useNavigate()
     const [data, setData] = useState('')
     const [show, setShow] = useState(false)
-    const[resetpassword,setResetPassword]=useState('')
-    const[resetConfirmPassword,setResetConfirmPassword]=useState('')
+    const [dateOfBirth, setDateOfBrith] = useState('')
+    const [resetpassword, setResetPassword] = useState('')
+    const [resetConfirmPassword, setResetConfirmPassword] = useState('')
+    let array1 = dateOfBirth.split('')
+    let array2 = array1.splice(0, 10)
+    let Bithday = array2.join('')
+
     useEffect(() => {
         if (!localStorage.getItem("user")) {
             navigate("/login")
         }
-        
+
         else {
             const localData = JSON.parse(localStorage.getItem("user"))
             const token = localData.token
@@ -27,11 +32,12 @@ const Profile = () => {
                 }
             }).then(async (response) => {
 
-                    const Data = await response.json()
-                    console.log(Data);
-                    setData(Data)
-                    setShow(true)
-                 
+                const Data = await response.json()
+                console.log(Data);
+                setData(Data)
+                setDateOfBrith(Data.dob)
+                setShow(true)
+
             }).catch((error) => {
                 console.log(error);
             })
@@ -41,24 +47,24 @@ const Profile = () => {
     const resetPassword = (e) => {
         e.preventDefault()
 
-        if(resetpassword !== resetConfirmPassword){
-           alert("password does not match")
+        if (resetpassword !== resetConfirmPassword) {
+            alert("password does not match")
         }
-        else{
-            const item ={resetpassword}
+        else {
+            const item = { resetpassword }
             console.log(item);
-            const localdata=JSON.parse(localStorage.getItem("user"))
+            const localdata = JSON.parse(localStorage.getItem("user"))
             const token = localdata.token
-            fetch(`${process.env.REACT_APP_LINK}/resetpassword`,{
-                method:"PATCH",
+            fetch(`${process.env.REACT_APP_LINK}/resetpassword`, {
+                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `${token}`
-                  },
-                  body:JSON.stringify(item)
-            }).then((response)=>{
+                },
+                body: JSON.stringify(item)
+            }).then((response) => {
                 console.log(response);
-            }).catch((error)=>{
+            }).catch((error) => {
                 console.log(error);
             })
         }
@@ -87,7 +93,7 @@ const Profile = () => {
                                                 <ul className="list-unstyled mb-1-9">
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Email:</span> {data.email}</li>
                                                     <li className="mb-2 mb-xl-3 display-28 text-capitalize"><span className="display-26 text-secondary me-2 font-weight-600 ">Gender:</span > {data.gender}</li>
-                                                    <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Date Of Birth:</span> {data.dob}</li>
+                                                    <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Date Of Birth:</span> {Bithday}</li>
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Type:</span> {data.type}</li>
                                                     <li className="display-28"><span className="display-26 text-secondary me-2 font-weight-600">Tags:</span>{data.tags.map((val, index) => <span className='me-3 profile-home'>{val}</span>)}</li>
                                                 </ul>
@@ -102,14 +108,14 @@ const Profile = () => {
                                                             </div>
                                                             <div className="modal-body">
                                                                 <label className='form-label'>New Password</label>
-                                                                <input type="password" name='password'  className='form-control' value={resetpassword} onChange={(e)=>setResetPassword(e.target.value)} required/> <br />
+                                                                <input type="password" name='password' className='form-control' value={resetpassword} onChange={(e) => setResetPassword(e.target.value)} required /> <br />
                                                                 <label className='form-label'>Confirm Password</label>
-                                                                <input type="password" name='Confirmpassword'  value={resetConfirmPassword} className='form-control' onChange={(e)=>setResetConfirmPassword(e.target.value)} required/>
+                                                                <input type="password" name='Confirmpassword' value={resetConfirmPassword} className='form-control' onChange={(e) => setResetConfirmPassword(e.target.value)} required />
                                                             </div>
                                                             <div className="modal-footer">
                                                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button  className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close" 
-                                                                onClick={resetPassword}>Update Password</button>
+                                                                <button className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close"
+                                                                    onClick={resetPassword}>Update Password</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -123,7 +129,7 @@ const Profile = () => {
 
                         </div>
                     </div>
-                
+
                 </section>
                     :
                     <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>

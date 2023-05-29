@@ -2,15 +2,22 @@ import React, { useState, useEffect } from 'react'
 import Header from './Header'
 import { CirclesWithBar } from 'react-loader-spinner'
 import "./Ask.css"
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NavLink } from 'react-router-dom';
 
 const Home = () => {
-
+  const [value, setValue] = useState([])
+  const[option,setOption]=useState()
+  const[tagSearch,setTagSearch]=useState()
   const [loader, setLoader] = useState(false)
+  // const [serachPage, setSearchPage] = useState(false)
   const [pageno, setPageNo] = useState(1)
-  const [question, setQuestion] = useState()
+  const [question, setQuestion] = useState([])
+  // const [searchquestion, setSearchQuestion] = useState()
+  const [totalPage, setTotalPage] = useState('')
+  const [search, setSearch] = useState('')
+
   const prevpage = (e) => {
     e.preventDefault()
     if (pageno >= 2) {
@@ -19,24 +26,91 @@ const Home = () => {
   }
   const nextpage = (e) => {
     e.preventDefault()
-    setPageNo(pageno + 1)
+    if (pageno === totalPage) {
+      setPageNo(1)
+    }
+    else {
+      setPageNo(pageno + 1)
+    }
+  }
+
+  const data = async () => {
+
+    const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
+    const response = await api.json()
+    setValue(response)
   }
 
   const getQuestion = async () => {
-    const data = await fetch(`${process.env.REACT_APP_LINK}/question/list/${pageno}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-
-      }
-    })
-    const response = await data.json()
-
-    setQuestion(response.allData)
     setLoader(true)
+    try {
+      const data = await fetch(`${process.env.REACT_APP_LINK}/question/list/${pageno}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      const response = await data.json()
+      setQuestion(response.allData)
+      setTotalPage(response.total_page_no)
+      setLoader(false)
+    } catch (error) {
+      setLoader(false)
+      console.log(error);
+    }
+
   }
+  const questionSearch = () => {
+    // setSearchPage(true)
+    console.log(search, "serach value");
+    fetch(`${process.env.REACT_APP_LINK}/question/search/${search}/${pageno}`, {
+      method: "GET"
+    }).then(async (response) => {
+      try {
+        const data = await response.json()
+        console.log(data);
+        setQuestion(data.allData)
+        setLoader(false)
+        setSearch("")
+        if(response.status === 404){
+          toast.error('🦄 Wow so easy!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+        }
+      } catch (error) {
+        console.log(error,"error");
+      }
+     
+    }).catch((error) => {
+      setLoader(false)
+      console.log(error);
+    })
+  }
+const getTagSearch=(e)=>{
+  e.preventDefault()
+  setTagSearch(option)
+  fetch(`${process.env.REACT_APP_LINK}/tags/${option}/${pageno}`,{
+         method:"GET"
+       }).then(async(response)=>{
+        console.log(response,"response");
+        const res= await response.json()
+        setQuestion(res.allData);
+        setOption("")
+       }).catch((error)=>{
+        console.log(error);
+        setOption("")
+       })
+}
   useEffect(() => {
     getQuestion()
+    data()
   }, [pageno])
 
 
@@ -45,35 +119,59 @@ const Home = () => {
     <div>
       <Header />
       {
-        loader ? (<div className="container">
+        loader === false ? (<div className="container">
           <div className="row">
             <div className="col-9 my-4 mx-auto">
-              {
-                !question.length
-                  ?
-                  <h3 style={{ height: "85vh", display: "flex", justifyContent: "center ", alignItems: "center" }} >No Question Available.</h3>
-                  :
-                  question.map((val, index) => {
-                    const { _id, title } = val
-                    return (
+              <div className="row">
+                <div className="col-10">
+                  <input type="search" className='form-control mb-3' placeholder='Search Question Here ' value={search} onChange={(e) => setSearch(e.target.value)} />
+                </div>
+                <div className="col-2">
+                  <button className='btn btn-primary' type='submit' onClick={questionSearch}>Serach</button>
+                </div>
+              </div>
+              <div className="row">
 
-                      <>
-                        <div className="title-home my-2" key={index}>
-                          <NavLink to={`/question/${_id}`} style={{ textDecoration: "none", color: "black", fontSize: "21px" }}  >
-                            <p className='text-capitalize question-title'>{title}</p>
-                          </NavLink>
-                          <p >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum sequi minus perspiciatis voluptas tenetur ea ut, necessitatibus alias quaerat nesciunt!</p>
-                          <span className='tag-home'>html</span>
-                        </div>
-                      </>
-                    )
+              <div className="col-10">
+
+                <select onChange={(e)=>setOption(e.target.value)}  className='form-control'>
+                <option selected disabled value="">Search By Tag Name</option>
+                 {
+                   value.map((val,index)=><option key={index}>{val.name}</option>)
+                  }
+                </select>
+                  </div>
+                <div className="col-2">
+
+                <button className='btn btn-primary' onClick={getTagSearch}>Search</button>
+                </div>
+           
+                  </div>
+              {
+                question.length === 0 ? <h3 style={{ height: "80vh", display: "flex", justifyContent: "center ", alignItems: "center" }} >No Question Available.</h3> :
+                  question.map((item, index) => {
+                    const { _id, title, description, tags } = item
+                    return <div className="title-home my-2" key={index}>
+                      <NavLink to={`/question/${_id}`} style={{ textDecoration: "none", color: "black", fontSize: "21px" }}  >
+                        <p className='text-capitalize question-title'>{title}</p>
+                      </NavLink>
+                      <p className='block-ellipsis'>{description ? description : ''}</p>
+                      {tags ? tags.map((tag, index) => (
+                        <span className="me-3 p-2 tag-home" key={index + 1}>
+                          {tag}
+                        </span>
+                      )) : ''}
+                    </div>
                   })
               }
-              <div className='d-flex justify-content-end'>
-                <button className='btn btn-primary me-2' onClick={prevpage}>Prev</button>
-                <span className='mt-2' style={{ fontSize: "17px" }}>{pageno}</span>
-                <button className='btn btn-primary ms-2' onClick={nextpage}>Next</button>
-              </div>
+              {
+                question.length === 0 ? "" :
+                  <div className='d-flex justify-content-end'>
+                    <button className='btn btn-primary me-2' onClick={prevpage}>Prev</button>
+                    <span className='mt-2' style={{ fontSize: "17px" }}>{pageno}</span>
+                    <button className='btn btn-primary ms-2' onClick={nextpage}>Next</button>
+                  </div>
+              }
             </div>
           </div>
           <ToastContainer />

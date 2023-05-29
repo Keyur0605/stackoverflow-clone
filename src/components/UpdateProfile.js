@@ -100,6 +100,8 @@ const UpdateProfile = () => {
             setName('')
             setType('')
             navigate('/profile')
+        }).catch((error)=>{
+            console.log(error);
         })
     }
 }
@@ -135,9 +137,7 @@ const UpdateProfile = () => {
                                     <option selected disabled value="">Choose...</option>
                                     <option>Frontend Developer</option>
                                     <option>Backend Developer</option>
-                                    <option>FullStack Developer</option>
-                                    <option>WebSite Tester</option>
-                                    <option>SEO</option>
+                                    <option>Tester</option>
                                     <option>Non IT Field</option>
                                 </select>
                             </div>

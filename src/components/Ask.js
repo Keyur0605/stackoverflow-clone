@@ -25,7 +25,6 @@ function Ask() {
       getadat.push(a.name)
     }
     setAddTag(getadat)
-
   }
 
   useEffect(() => {

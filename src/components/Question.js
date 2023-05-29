@@ -1,47 +1,48 @@
-import React, { useState, useEffect } from 'react'
-import Header from './Header'
-import { useNavigate } from 'react-router-dom';
-import { CirclesWithBar } from 'react-loader-spinner'
-import "./Ask.css"
+import React, { useState, useEffect } from "react";
+import Header from "./Header";
+import { useNavigate } from "react-router-dom";
+import { CirclesWithBar } from "react-loader-spinner";
+import "./Ask.css";
 const Question = () => {
   const navigate = useNavigate()
   const [question, setQuestion] = useState([])
-  const[show,setShow]=useState(false)
+  const [show, setShow] = useState(false)
   const [isLoading, setisLoading] = useState(false);
   const ask = () => {
-    navigate('/ask')
-  }
-
-  useEffect(()=>{
-    if(!localStorage.getItem("user")){
-      navigate('/login')
-    }
-    else{
-      getQuestion()
-    }
-
-  },[])
-    
-  const getQuestion = async () => {
-    setisLoading(true);
-    const username = JSON.parse(localStorage.getItem("user"));
-    const data = await fetch(`${process.env.REACT_APP_LINK}/question/user`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${username.token}`,
-      },
-    });
-    const response = await data.json();
-    setQuestion(response);
-    setisLoading(false);
+    navigate("/ask");
   };
 
- 
+  useEffect(() => {
+    if (!localStorage.getItem("user")) {
+      navigate("/login");
+    } else {
+      getQuestion();
+    }
+  }, []);
 
-  const hideshow=(id)=>{
-    setShow(id)
-  }
+  const getQuestion = async () => {
+    setisLoading(true);
+    try {
+      const username = JSON.parse(localStorage.getItem("user"));
+      const data = await fetch(`${process.env.REACT_APP_LINK}/question/user`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${username.token}`,
+        },
+      });
+      const response = await data.json();
+      setQuestion(response);
+      setisLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+   
+  };
+
+  const hideshow = (id) => {
+    setShow(id);
+  };
 
   return (
     <div>
@@ -60,7 +61,7 @@ const Question = () => {
             </button>
           </div>
           <div className="col-8 mt-3 mx-auto">
-            {question.length !== 0 && isLoading ? (
+            {question.length !== 0 && isLoading  ? (
               <div
                 style={{
                   height: "75vh",
@@ -131,6 +132,7 @@ const Question = () => {
         </div>
       </div>
     </div>
+
   );
 }
 

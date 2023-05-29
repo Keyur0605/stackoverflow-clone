@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate, NavLink } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import Header from './Header';
  import "./Ask.css"
 import { CirclesWithBar } from 'react-loader-spinner'
