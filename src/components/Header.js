@@ -50,8 +50,8 @@ const Header = () => {
                   :
                   <>
                     <NavLink to="/" className="mx-3" style={{ textDecoration: "none", color: "black" }}> Home</NavLink>
-                    <NavLink to="/register" className="mx-3" style={{ textDecoration: "none", color: "black" }}> Register</NavLink>
-                    <NavLink to="/login" className="mx-3" style={{ textDecoration: "none", color: "black" }}>Login</NavLink>
+                    {/* <NavLink to="/register" className="mx-3" style={{ textDecoration: "none", color: "black" }}> Register</NavLink> */}
+                    <NavLink to="/login" className="mx-3" style={{ textDecoration: "none", color: "black" }}>Sign in</NavLink>
                   </>
               }
             </ul>

@@ -6,7 +6,7 @@ const Protectrd = (props) => {
     const navigate=useNavigate()
     useEffect(() => {
     if(!localStorage.getItem("user")){
-        navigate("/register")
+        navigate("/login")
     }
     }, [])
   return (

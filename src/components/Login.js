@@ -67,17 +67,6 @@ const Login = () => {
     }
   })
 
-  // const google = (e) => {
-  //   e.preventDefault()
-  //   window.open("http://localhost:8000/auth/google", "_self");
-
-  // }
-
-
-  // const github=(e)=>{
-  //   e.preventDefault()
-  //   window.open("http://localhost:8000/auth/github", "_self");
-  // }
 
   return (
     <div>
@@ -96,38 +85,27 @@ const Login = () => {
             ariaLabel='circles-with-bar-loading'
           /></div>:<div className="container mt-5">
         <div className="row">
-          <div className="col-6 mx-auto">
+          <div className="col-4 mx-auto">
             <form onSubmit={handleSubmit}>
-
-              <div >
-                <label className="col-form-label">Email</label>
-                <input type="email" className="form-control" name='email' value={values.email} onChange={handleChange} onBlur={handleBlur} />
-                {errors.email && touched.email ? <p style={{ color: "red" }}>{errors.email}</p> : null}
+               <h3 className='text-center'>Sign in</h3>
+              <div  className='mt-5'>
+                <input type="email" className="form-control " placeholder='Email' name='email' value={values.email} onChange={handleChange} onBlur={handleBlur} />
+                {errors.email && touched.email ? <p style={{ color: "red" }} className='mb-0'>{errors.email}</p> : null}
               </div>
-              <div >
-                <label className="col-form-label">Password</label>
-                <input type="password" className="form-control" name='password' value={values.password} onChange={handleChange} onBlur={handleBlur} />
-                {errors.password && touched.password ? <p style={{ color: "red" }}>{errors.password}</p> : null}
+              <div className='mt-3'> 
+                <input type="password" className="form-control" placeholder='Password' name='password' value={values.password} onChange={handleChange} onBlur={handleBlur} />
+                {errors.password && touched.password ? <p style={{ color: "red" }} className='mb-0'>{errors.password}</p> : null}
               </div>
-              <button type="submit" className='btn btn-primary mt-4'>Login</button>
-              <NavLink to="/forgotpassword"><button className='btn btn-primary mt-4 ms-4'>Forget Password</button></NavLink>
+              <div className='d-grid' >
+              <button type="submit" className='btn btn-primary mt-4 d-block '>Sign In</button>
+              </div>
             </form>
-            <button className="btn  btn-block text-uppercase d-block my-3"  style={{ color: "white", backgroundColor: "#ea4335" }}><i className="fab fa-google mr-2"></i> Sign in with Google</button>
-            <button className="btn   btn-block text-uppercase d-block my-3" style={{ color: "white", backgroundColor: "#3b5998" }} ><i className="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
-            <button className="btn  btn-primary  btn-block text-uppercase d-block my-3"  ><i className="fab fa-facebook-f mr-2"></i> Sign in with LinkedIn</button>
-            <button className="btn  btn-dark  btn-block text-uppercase d-block my-3"   ><i className="fab fa-facebook-f mr-2"></i> Sign in with GitHub</button>
-
-            {/* <GoogleOAuthProvider clientId="115983779298-96dvhm5cgob06huephdvev4oa5092mek.apps.googleusercontent.com">
-
-
-              <GoogleLogin
-                onSuccess={credentialResponse => {
-                  console.log(credentialResponse);
-                }}
-                onError={() => {
-                  console.log('Login Failed');
-                }}
-              />;</GoogleOAuthProvider> */}
+            <div className='d-flex justify-content-between'>
+              <NavLink to="/forgotpassword"><p className=' mt-4 ' style={{color:"#1976d2",textDecoration:"underline"}}>Forget Password</p></NavLink>
+              <NavLink to="/register"><p className=' mt-4 ' style={{color:"#1976d2",textDecoration:"underline"}}>Don't have an account? Sign Up</p></NavLink>
+            </div>
+           
+           
           </div>
         </div>
       </div>}
