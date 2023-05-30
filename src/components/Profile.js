@@ -10,12 +10,14 @@ const Profile = () => {
     const [data, setData] = useState('')
     const [show, setShow] = useState(false)
     const [dateOfBirth, setDateOfBrith] = useState('')
+    // const[date,setDate]=useState('')
     const [resetpassword, setResetPassword] = useState('')
     const [resetConfirmPassword, setResetConfirmPassword] = useState('')
-    let array1 = dateOfBirth.split('')
-    let array2 = array1.splice(0, 10)
-    let Bithday = array2.join('')
-
+//     if(dateOfBirth === null){let array1 = dateOfBirth.split('')
+//     let array2 = array1.splice(0, 10)
+//     let Birthday = array2.join('');
+//     setDate(Birthday)
+// }
     useEffect(() => {
         if (!localStorage.getItem("user")) {
             navigate("/login")
@@ -93,9 +95,9 @@ const Profile = () => {
                                                 <ul className="list-unstyled mb-1-9">
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Email:</span> {data.email}</li>
                                                     <li className="mb-2 mb-xl-3 display-28 text-capitalize"><span className="display-26 text-secondary me-2 font-weight-600 ">Gender:</span > {data.gender}</li>
-                                                    <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Date Of Birth:</span> {Bithday}</li>
+                                                    <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Date Of Birth:</span> {dateOfBirth}</li>
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Type:</span> {data.type}</li>
-                                                    <li className="display-28"><span className="display-26 text-secondary me-2 font-weight-600">Tags:</span>{data.tags.map((val, index) => <span className='me-3 profile-home'>{val}</span>)}</li>
+                                                    <li className="display-28"><span className="display-26 text-secondary me-2 font-weight-600">Tags:</span>{data.tags.map((val, index) => <span className='me-3 profile-home'>{val.length===0?"":val}</span>)}</li>
                                                 </ul>
                                                 <NavLink to="/updateprofile"><button className='btn btn-info me-3 mt-3'>Update Profile</button></NavLink>
                                                 <button className='btn btn-primary mt-3' data-bs-toggle="modal" data-bs-target="#exampleModal" >Reset Password</button>

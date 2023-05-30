@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import { useFormik } from 'formik';
 import { login } from "../schema/validation"
 import Cookies from "universal-cookie"
+import { CirclesWithBar } from 'react-loader-spinner'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const initialValues = {
@@ -14,6 +15,7 @@ const initialValues = {
 
 const Login = () => {
   const navigate = useNavigate()
+  const[loader,setLoader]=useState(false)
   const cookies = new Cookies()
   useEffect(() => {
     if (localStorage.getItem("user")) {
@@ -39,6 +41,7 @@ const Login = () => {
           let user = token.name
           cookies.set('jwt', token.token, { path: ' /' })
           localStorage.setItem(`user`, JSON.stringify({ user, token: token.token }))
+          setLoader(true)
           navigate("/")
         }
         else if(response.status === 401){
@@ -79,7 +82,19 @@ const Login = () => {
   return (
     <div>
       <Header />
-      <div className="container mt-5">
+      {loader ? <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <CirclesWithBar
+            height="100"
+            width="100"
+            color="#0d6efd"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            outerCircleColor=""
+            innerCircleColor=""
+            barColor=""
+            ariaLabel='circles-with-bar-loading'
+          /></div>:<div className="container mt-5">
         <div className="row">
           <div className="col-6 mx-auto">
             <form onSubmit={handleSubmit}>
@@ -95,7 +110,7 @@ const Login = () => {
                 {errors.password && touched.password ? <p style={{ color: "red" }}>{errors.password}</p> : null}
               </div>
               <button type="submit" className='btn btn-primary mt-4'>Login</button>
-
+              <NavLink to="/forgotpassword"><button className='btn btn-primary mt-4 ms-4'>Forget Password</button></NavLink>
             </form>
             <button className="btn  btn-block text-uppercase d-block my-3"  style={{ color: "white", backgroundColor: "#ea4335" }}><i className="fab fa-google mr-2"></i> Sign in with Google</button>
             <button className="btn   btn-block text-uppercase d-block my-3" style={{ color: "white", backgroundColor: "#3b5998" }} ><i className="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
@@ -115,7 +130,7 @@ const Login = () => {
               />;</GoogleOAuthProvider> */}
           </div>
         </div>
-      </div>
+      </div>}
       <ToastContainer/>
     </div>
   )

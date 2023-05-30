@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Header from './Header'
 import { CirclesWithBar } from 'react-loader-spinner'
 import "./Ask.css"
-import { ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NavLink } from 'react-router-dom';
 
 const Home = () => {
   const [value, setValue] = useState([])
-  const[option,setOption]=useState()
-  const[tagSearch,setTagSearch]=useState()
+  const [option, setOption] = useState()
+  const [tagSearch, setTagSearch] = useState()
   const [loader, setLoader] = useState(false)
   // const [serachPage, setSearchPage] = useState(false)
   const [pageno, setPageNo] = useState(1)
@@ -72,7 +72,7 @@ const Home = () => {
         setQuestion(data.allData)
         setLoader(false)
         setSearch("")
-        if(response.status === 404){
+        if (response.status === 404) {
           toast.error('🦄 Wow so easy!', {
             position: "top-right",
             autoClose: 5000,
@@ -82,32 +82,32 @@ const Home = () => {
             draggable: true,
             progress: undefined,
             theme: "light",
-            });
+          });
         }
       } catch (error) {
-        console.log(error,"error");
+        console.log(error, "error");
       }
-     
+
     }).catch((error) => {
       setLoader(false)
       console.log(error);
     })
   }
-const getTagSearch=(e)=>{
-  e.preventDefault()
-  setTagSearch(option)
-  fetch(`${process.env.REACT_APP_LINK}/tags/${option}/${pageno}`,{
-         method:"GET"
-       }).then(async(response)=>{
-        console.log(response,"response");
-        const res= await response.json()
-        setQuestion(res.allData);
-        setOption("")
-       }).catch((error)=>{
-        console.log(error);
-        setOption("")
-       })
-}
+  const getTagSearch = (e) => {
+    e.preventDefault()
+    setTagSearch(option)
+    fetch(`${process.env.REACT_APP_LINK}/tags/${option}/${pageno}`, {
+      method: "GET"
+    }).then(async (response) => {
+      console.log(response, "response");
+      const res = await response.json()
+      setQuestion(res.allData);
+      setOption("")
+    }).catch((error) => {
+      console.log(error);
+      setOption("")
+    })
+  }
   useEffect(() => {
     getQuestion()
     data()
@@ -132,21 +132,21 @@ const getTagSearch=(e)=>{
               </div>
               <div className="row">
 
-              <div className="col-10">
+                <div className="col-10">
 
-                <select onChange={(e)=>setOption(e.target.value)}  className='form-control'>
-                <option selected disabled value="">Search By Tag Name</option>
-                 {
-                   value.map((val,index)=><option key={index}>{val.name}</option>)
-                  }
-                </select>
-                  </div>
+                  <select onChange={(e) => setOption(e.target.value)} className='form-control'>
+                    <option selected disabled value="">Search By Tag Name</option>
+                    {
+                      value.map((val, index) => <option key={index}>{val.name}</option>)
+                    }
+                  </select>
+                </div>
                 <div className="col-2">
 
-                <button className='btn btn-primary' onClick={getTagSearch}>Search</button>
+                  <button className='btn btn-primary' onClick={getTagSearch}>Search</button>
                 </div>
-           
-                  </div>
+              </div>
+                <button className='btn btn-danger mt-4'  onClick={getQuestion}>Clear Filter</button>
               {
                 question.length === 0 ? <h3 style={{ height: "80vh", display: "flex", justifyContent: "center ", alignItems: "center" }} >No Question Available.</h3> :
                   question.map((item, index) => {

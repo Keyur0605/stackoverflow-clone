@@ -12,6 +12,7 @@ import ErrorPage from "./components/ErrorPage";
 import SingleQuestion from "./components/SingleQuestion";
 import Profile from "./components/Profile";
 import UpdateProfile from "./components/UpdateProfile";
+import ForgotPassword from "./components/ForgotPassword";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/tag" element={<Protectrd Cmp={Tag} />} />
           <Route path="/ask" element={<Protectrd Cmp={Ask} />} />
           <Route path="/profile" element={<Protectrd Cmp={Profile} />} />
+          <Route path="/forgotpassword" element={<ForgotPassword/>} />
           <Route
             path="/updateprofile"
             element={<Protectrd Cmp={UpdateProfile} />}
