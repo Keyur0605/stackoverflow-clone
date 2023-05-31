@@ -6,11 +6,14 @@ import Header from './Header';
 const ForgotPassword = () => {
     const [email, setEmail] = useState("")
     const [disable, setDisable] = useState(false)
+    const[forget,setForget]=useState(false)
+    const[forgetpass,setForgetpass]=useState(false)
     const [two, setTwo] = useState(false)
     const [otp, setOtp] = useState("")
     const [newpass, setNewPass] = useState("")
     const [cnewpass, setCNewPass] = useState("")
     const[token,setToken]=useState('')
+    const[optDisable,setOtpDisable]=useState(false)
 const navigate= useNavigate()
     const send = (e) => {
         e.preventDefault()
@@ -51,6 +54,8 @@ const navigate= useNavigate()
                     setDisable(true)
                    const jwt=await response.json()
                    setToken(jwt.token)
+                   setOtpDisable(true)
+                   setForget(true)
 
 
                 }
@@ -109,6 +114,8 @@ const navigate= useNavigate()
                         theme: "colored",
                     });
                     setTwo(true)
+                    setForget(true)
+                    setForgetpass(true)
                 }
                 else if (responce.status === 204 || responce.status === 400) {
                     toast.error(' OTP Not Match', {
@@ -223,10 +230,10 @@ const navigate= useNavigate()
                             <input type="text" className="form-control" placeholder='Enter Your OTP' name='otp' value={otp} onChange={(e) => setOtp(e.target.value)} />
                         </div>
 
-                        <button type="submit" onClick={otpsCheck} className="btn btn-primary mb-5"> OTP Verify</button>
+                        <button type="submit" onClick={otpsCheck} disabled={optDisable?"":"otpDisable"} className="btn btn-primary mb-5"> OTP Verify</button>
                     </form>}
 
-                    <form>
+                    {forget && forgetpass &&<form>
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Set New Password</label>
                             <input type="password" className="form-control mb-4" name="newpass" placeholder='Enter Your New Password' value={newpass} onChange={(e) => setNewPass(e.target.value)} />
@@ -234,7 +241,7 @@ const navigate= useNavigate()
                         </div>
 
                         <button type="submit" onClick={setPassword} className="btn btn-primary">send</button>
-                    </form>
+                    </form>}
 
 
                 </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Multiselect from 'multiselect-react-dropdown';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import Header from "./Header"
 const UpdateProfile = () => {
     const [addtag, setAddTag] = useState([])
     const [tags, setTags] = useState([])
@@ -108,6 +109,7 @@ const UpdateProfile = () => {
 
     return (
         <div >
+            <Header/>
             <div className='container  d-flex justify-content-center my-5 ' style={{ height: "100vh" }}>
                 <div className="row">
                     <div className="col-8 mx-auto">
@@ -125,7 +127,7 @@ const UpdateProfile = () => {
                             <div className="col-md-8 mx-auto">
                                 <label className="form-label">Profile Image</label>
                                 <input className="form-control" type="file" onChange={imagesAdd} />
-                                <img src={picture} className='mt-3' alt="" width="400px" />
+                                <img src={picture} className='mt-3' alt="" width="200px" />
                             </div>
                             <div className="col-md-8 mx-auto">
                                 <label className="form-label">Date Of Birth</label>
@@ -145,19 +147,19 @@ const UpdateProfile = () => {
                                 <label className="form-label me-5">Gender</label>
                                 <div className="form-check form-check-inline">
 
-                                    <input className="form-check-input" type="radio" name="gender" value="male" onChange={(e) => setGender(e.target.value)} required />
+                                    <input className="form-check-input" type="radio" name="gender" value="male"  onChange={(e) => setGender(e.target.value)} required  />
                                     <label className="form-check-label" >
                                         Male
                                     </label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" name="gender" value="female" onChange={(e) => setGender(e.target.value)} />
+                                    <input className="form-check-input" type="radio" name="gender" value="female"  onChange={(e) => setGender(e.target.value)} />
                                     <label className="form-check-label" >
                                         Female
                                     </label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" name="gender" value="other" onChange={(e) => setGender(e.target.value)} />
+                                    <input className="form-check-input" type="radio" name="gender" value="other"  onChange={(e) => setGender(e.target.value)} />
                                     <label className="form-check-label">
                                         Other
                                     </label>
@@ -186,15 +188,7 @@ const UpdateProfile = () => {
                             </div>
 
                             <div className="col-8 mx-auto">
-                                <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" value="" required />
-                                    <label className="form-check-label">
-                                        Agree to terms and conditions
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="col-8 mx-auto">
-                                <button className="btn btn-primary" type='submit' onClick={updateProfile}>Submit form</button>
+                                <button className="btn btn-primary mb-4" type='submit' onClick={updateProfile}>Submit form</button>
                             </div>
                         </form>
                     </div>

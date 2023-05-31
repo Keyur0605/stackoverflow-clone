@@ -41,7 +41,11 @@ const[loader,setLoader]=useState(false)
         <div className="container">
             <div className="row">
               <div className='mt-3 d-flex' style={{borderBottom:"1px solid gray"}}>
+                {
+                data.picture === ""  ?<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="..." width="55px" height="55px" style={{borderRadius:"50%"}} />:
                 <img src={data.picture} className='mb-3' alt="profile" style={{borderRadius:"50%"}} width="55px" height="55px" />
+                }
+              
                 <div className='ms-3 mt-1'>
                   <h5 style={{color:"white"}} className='text-capitalize mb-0'>{data.name}</h5>
                   <span class="dot"></span><span className='active-button'>Active Now</span>

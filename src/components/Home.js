@@ -11,10 +11,8 @@ const Home = () => {
   const [option, setOption] = useState()
   const [tagSearch, setTagSearch] = useState()
   const [loader, setLoader] = useState(false)
-  // const [serachPage, setSearchPage] = useState(false)
   const [pageno, setPageNo] = useState(1)
   const [question, setQuestion] = useState([])
-  // const [searchquestion, setSearchQuestion] = useState()
   const [totalPage, setTotalPage] = useState('')
   const [search, setSearch] = useState('')
 
@@ -35,10 +33,14 @@ const Home = () => {
   }
 
   const data = async () => {
+    try {
+      const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
+      const response = await api.json()
+      setValue(response)
+    } catch (error) {
+      console.log(error);
+    }
 
-    const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
-    const response = await api.json()
-    setValue(response)
   }
 
   const getQuestion = async () => {
@@ -61,52 +63,61 @@ const Home = () => {
 
   }
   const questionSearch = () => {
-    // setSearchPage(true)
-    console.log(search, "serach value");
-    fetch(`${process.env.REACT_APP_LINK}/question/search/${search}/${pageno}`, {
-      method: "GET"
-    }).then(async (response) => {
-      try {
-        const data = await response.json()
-        console.log(data);
-        setQuestion(data.allData)
-        setLoader(false)
-        setSearch("")
-        if (response.status === 404) {
-          toast.error('🦄 Wow so easy!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+    try {
+      console.log(search, "serach value");
+      fetch(`${process.env.REACT_APP_LINK}/question/search/${search}/${pageno}`, {
+        method: "GET"
+      }).then(async (response) => {
+        try {
+          const data = await response.json()
+          console.log(data);
+          setQuestion(data.allData)
+          setLoader(false)
+          setSearch("")
+          if (response.status === 404) {
+            toast.error('🦄 Wow so easy!', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+        } catch (error) {
+          console.log(error, "error");
         }
-      } catch (error) {
-        console.log(error, "error");
-      }
 
-    }).catch((error) => {
-      setLoader(false)
+      }).catch((error) => {
+        setLoader(false)
+        console.log(error);
+      })
+    } catch (error) {
       console.log(error);
-    })
+    }
   }
   const getTagSearch = (e) => {
-    e.preventDefault()
-    setTagSearch(option)
-    fetch(`${process.env.REACT_APP_LINK}/tags/${option}/${pageno}`, {
-      method: "GET"
-    }).then(async (response) => {
-      console.log(response, "response");
-      const res = await response.json()
-      setQuestion(res.allData);
-      setOption("")
-    }).catch((error) => {
+    try {
+      e.preventDefault()
+      setTagSearch(option)
+
+      fetch(`${process.env.REACT_APP_LINK}/tags/${option}/${pageno}`, {
+        method: "GET"
+      }).then(async (response) => {
+        console.log(response, "response");
+        const res = await response.json()
+        setQuestion(res.allData);
+        setOption("")
+      }).catch((error) => {
+        console.log(error);
+        setOption("")
+      })
+    }
+    catch (error) {
       console.log(error);
-      setOption("")
-    })
+    }
   }
   useEffect(() => {
     getQuestion()
@@ -123,16 +134,13 @@ const Home = () => {
           <div className="row">
             <div className="col-9 my-4 mx-auto">
               <div className="row">
-                <div className="col-4">
+                <div className=" col-xl-5 col-lg-4 col-md-6 col-10 ">
                   <input type="search" className='form-control mb-3' placeholder='Search Question Here ' value={search} onChange={(e) => setSearch(e.target.value)} />
                 </div>
-                <div className="col-1">
+                <div className="col-md-1 col-2 ">
                   <button className='btn btn-primary' type='submit' onClick={questionSearch}>Serach</button>
                 </div>
-              
-           
-
-                <div className="col-4">
+                {/* <div className="col-lg-4 col-8">
 
                   <select onChange={(e) => setOption(e.target.value)} className='form-control'>
                     <option selected disabled value="">Search By Tag Name</option>
@@ -142,12 +150,27 @@ const Home = () => {
                   </select>
                 </div>
                 <div className="col-1">
-
                   <button className='btn btn-primary' onClick={getTagSearch}>Search</button>
+                  </div> */}
+                <div className="col-xl-3 col-lg-2 col-8 mx-auto">
+                  <div class="dropdown">
+                    <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Search By Tag Name
+                    </button>
+                    <ul class="dropdown-menu " style={{}}>
+                      <select onChange={(e) => setOption(e.target.value)} className='form-control mb-3'>
+                        <option selected disabled value="">Search By Tag Name</option>
+                        {
+                          value.map((val, index) => <option key={index}>{val.name}</option>)
+                        }
+                      </select>
+                      <button className='btn btn-primary d-block mx-auto' onClick={getTagSearch}>Search</button>
+                    </ul>
                   </div>
-                  <div className="col-2">
-                <button className='btn btn-danger'  onClick={getQuestion}>Clear Filter</button>
-                  </div>
+                </div>
+                <div className="col-xl-2 col-lg-2 col-4 ms-auto ">
+                  <button className='btn btn-danger' onClick={getQuestion}>Clear Filter</button>
+                </div>
               </div>
               {
                 question.length === 0 ? <h3 style={{ height: "80vh", display: "flex", justifyContent: "center ", alignItems: "center" }} >No Question Available.</h3> :
@@ -179,19 +202,19 @@ const Home = () => {
           <ToastContainer />
         </div>
         ) :
-         <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <CirclesWithBar
-            height="100"
-            width="100"
-            color="#0d6efd"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-            outerCircleColor=""
-            innerCircleColor=""
-            barColor=""
-            ariaLabel='circles-with-bar-loading'
-          /></div>
+          <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <CirclesWithBar
+              height="100"
+              width="100"
+              color="#0d6efd"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              outerCircleColor=""
+              innerCircleColor=""
+              barColor=""
+              ariaLabel='circles-with-bar-loading'
+            /></div>
       }
 
     </div>

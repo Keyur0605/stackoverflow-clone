@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, NavLink } from 'react-router-dom'
-import { CirclesWithBar } from 'react-loader-spinner'
+import { CirclesWithBar } from 'react-loader-spinner';
+import { ToastContainer, toast } from 'react-toastify';
 import "./Ask.css"
 import "./Profile.css"
 import Header from './Header'
@@ -10,14 +11,10 @@ const Profile = () => {
     const [data, setData] = useState('')
     const [show, setShow] = useState(false)
     const [dateOfBirth, setDateOfBrith] = useState('')
-    // const[date,setDate]=useState('')
+    const [date, setDate] = useState('')
     const [resetpassword, setResetPassword] = useState('')
     const [resetConfirmPassword, setResetConfirmPassword] = useState('')
-//     if(dateOfBirth === null){let array1 = dateOfBirth.split('')
-//     let array2 = array1.splice(0, 10)
-//     let Birthday = array2.join('');
-//     setDate(Birthday)
-// }
+
     useEffect(() => {
         if (!localStorage.getItem("user")) {
             navigate("/login")
@@ -35,11 +32,20 @@ const Profile = () => {
             }).then(async (response) => {
 
                 const Data = await response.json()
-                console.log(Data);
                 setData(Data)
                 setDateOfBrith(Data.dob)
+                // if (dateOfBirth !== "") {
+                //     let array1 = dateOfBirth.split('')
+                //     let array2 = array1.splice(0, 10)
+                //     let Birthday = array2.join('');
+                //     setDate(Birthday)
+                //     setShow(true)
+                // }
+                // else{
+                //     setShow(true)
+                // }
+                // console.log(date,"birth date");
                 setShow(true)
-
             }).catch((error) => {
                 console.log(error);
             })
@@ -51,6 +57,18 @@ const Profile = () => {
 
         if (resetpassword !== resetConfirmPassword) {
             alert("password does not match")
+        }
+        else if (resetpassword === "" || resetConfirmPassword === "") {
+            toast.error('Please Fill Password Details', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
         }
         else {
             const item = { resetpassword }
@@ -97,7 +115,7 @@ const Profile = () => {
                                                     <li className="mb-2 mb-xl-3 display-28 text-capitalize"><span className="display-26 text-secondary me-2 font-weight-600 ">Gender:</span > {data.gender}</li>
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Date Of Birth:</span> {dateOfBirth}</li>
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Type:</span> {data.type}</li>
-                                                    <li className="display-28"><span className="display-26 text-secondary me-2 font-weight-600">Tags:</span>{data.tags.map((val, index) => <span className='me-3 profile-home'>{val.length===0?"":val}</span>)}</li>
+                                                    <li className="display-28"><span className="display-26 text-secondary me-2 font-weight-600">Tags:</span>{data.tags.map((val, index) => <span className='me-3 profile-home' key={index}>{val.length === 0 ? "" : val}</span>)}</li>
                                                 </ul>
                                                 <NavLink to="/updateprofile"><button className='btn btn-info me-3 mt-3'>Update Profile</button></NavLink>
                                                 <button className='btn btn-primary mt-3' data-bs-toggle="modal" data-bs-target="#exampleModal" >Reset Password</button>
@@ -131,7 +149,7 @@ const Profile = () => {
 
                         </div>
                     </div>
-
+                    <ToastContainer />
                 </section>
                     :
                     <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -146,7 +164,8 @@ const Profile = () => {
                             innerCircleColor=""
                             barColor=""
                             ariaLabel='circles-with-bar-loading'
-                        /></div>
+                        />
+                    </div>
                 }
 
 

@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { CirclesWithBar } from 'react-loader-spinner'
 import Cookies from 'universal-cookie'
 const Header = () => {
- 
+  const [profiles, setProfiles] = useState()
+  const [loader, setLoader] = useState(false)
+  const [data, setData] = useState(false)
   const navigate = useNavigate()
   const cookie = new Cookies()
-   const username= JSON.parse(localStorage.getItem("user"))
   const logout = (e) => {
     e.preventDefault();
 
@@ -25,6 +27,30 @@ const Header = () => {
 
   }
 
+  const profile = async () => {
+    if (localStorage.getItem("user")) {
+      const data = JSON.parse(localStorage.getItem("user"));
+      const token = data.token
+      const api = await fetch(`${process.env.REACT_APP_LINK}/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `${token}`
+        }
+      })
+      const response = await api.json()
+      setProfiles(response)
+      setLoader(true)
+    }
+    else {
+      
+    }
+  }
+
+
+  useEffect(() => {
+    profile()
+  }, [])
 
   return (
     <div>
@@ -41,7 +67,7 @@ const Header = () => {
                 localStorage.getItem("user") ? <><NavLink to="/" className="mx-3 " style={{ textDecoration: "none", color: "black", marginTop: "6px" }}> Home</NavLink>
                   <NavLink to="/question" className="mx-3" style={{ textDecoration: "none", color: "black", marginTop: "6px" }}>Question</NavLink>
                   <NavLink to="/tag" className="mx-3 " style={{ textDecoration: "none", color: "black", marginTop: "6px" }}>Tag</NavLink>
-                
+
                 </>
 
                   :
@@ -52,15 +78,28 @@ const Header = () => {
                   </>
               }
 
-          
+
             </ul>
-            {
-              localStorage.getItem("user")?<div >
-              <NavLink to="/profile"><button className='btn btn-primary me-3'>Profile</button></NavLink>
-              <NavLink to="/chat"><button className='btn btn-warning me-3'>Chat</button></NavLink>
-              <button className='btn btn-danger' onClick={logout} >Logout</button>
-              </div>:""
-            }
+            {loader ?
+              localStorage.getItem("user") ?
+                <div className=''>
+                  <div class="profile" style={{position:"relative"}} onClick={()=>setData(!data)}>
+                   {
+                    profiles.picture === ""? <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="..." width="45px" height="45px" style={{borderRadius:"60%"}}   /> :<img src={profiles.picture} alt='' width="45px" height="45px" style={{borderRadius:"60%"}}/>
+                   }
+                    </div>
+                    {data &&<div className='profile-card'>
+                    <ul >
+                      <h5 className='text-center mb-3 text-capitalize'>{profiles.name}</h5>
+                      <span style={{fontSize:"13px"}}>{profiles.email}</span>
+                      <NavLink to="/profile" className="mx-auto mt-3"><button className='btn btn-primary '>Profile</button></NavLink>
+                      <NavLink to="/chat" className="mx-auto"><button className='btn btn-warning mt-3'>Chat</button></NavLink>
+                      <button className='btn btn-danger mt-3 ' onClick={logout} >Logout</button>
+                    </ul>
+                  </div>}
+                </div>
+                : ""
+              : ""}
           </div>
         </div>
       </nav>

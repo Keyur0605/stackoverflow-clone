@@ -107,6 +107,7 @@ function Ask() {
           <div className="col-10 mx-auto">
             <div className='center-box'>
               <div className="main-box">
+                <form>
                 <div className="title-text">
                   <h3>Title</h3>
                   <span>Be Specific and imagine you are asking a question to another person</span>
@@ -148,6 +149,8 @@ function Ask() {
 
 
                 </div>
+                </form>
+                
               </div>
               <button onClick={add} className='mt-5 btn btn-primary mb-5'>Add Question</button>
             </div>
