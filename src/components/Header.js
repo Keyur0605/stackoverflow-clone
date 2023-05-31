@@ -38,23 +38,29 @@ const Header = () => {
             <ul className="navbar-nav mx-auto">
 
               {
-                localStorage.getItem("user") ? <><NavLink to="/" className="mx-3" style={{ textDecoration: "none", color: "black", marginTop: "6px" }}> Home</NavLink>
+                localStorage.getItem("user") ? <><NavLink to="/" className="mx-3 " style={{ textDecoration: "none", color: "black", marginTop: "6px" }}> Home</NavLink>
                   <NavLink to="/question" className="mx-3" style={{ textDecoration: "none", color: "black", marginTop: "6px" }}>Question</NavLink>
-                  <NavLink to="/tag" className="mx-3" style={{ textDecoration: "none", color: "black", marginTop: "6px" }}>Tag</NavLink>
-                <div  style={{position:"fixed",top:"9px",right:"20px"}}>
-                 <NavLink to="/profile"><button className='btn btn-primary me-3'>Profile</button></NavLink>
-                 <button className='btn btn-danger' onClick={logout} >Logout</button>
-                 </div>
+                  <NavLink to="/tag" className="mx-3 " style={{ textDecoration: "none", color: "black", marginTop: "6px" }}>Tag</NavLink>
+                
                 </>
 
                   :
                   <>
-                    <NavLink to="/" className="mx-3" style={{ textDecoration: "none", color: "black" }}> Home</NavLink>
-                    {/* <NavLink to="/register" className="mx-3" style={{ textDecoration: "none", color: "black" }}> Register</NavLink> */}
-                    <NavLink to="/login" className="mx-3" style={{ textDecoration: "none", color: "black" }}>Sign in</NavLink>
+                    <NavLink to="/" className="mx-3 " style={{ textDecoration: "none", color: "black" }}> Home</NavLink>
+                    {/* <NavLink to="/register" className="mx-3 active" style={{ textDecoration: "none", color: "black" }}> Register</NavLink> */}
+                    <NavLink to="/login" className="mx-3 " style={{ textDecoration: "none", color: "black" }}>Sign in</NavLink>
                   </>
               }
+
+          
             </ul>
+            {
+              localStorage.getItem("user")?<div >
+              <NavLink to="/profile"><button className='btn btn-primary me-3'>Profile</button></NavLink>
+              <NavLink to="/chat"><button className='btn btn-warning me-3'>Chat</button></NavLink>
+              <button className='btn btn-danger' onClick={logout} >Logout</button>
+              </div>:""
+            }
           </div>
         </div>
       </nav>

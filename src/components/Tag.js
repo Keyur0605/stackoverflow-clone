@@ -19,18 +19,6 @@ const Tag = () => {
       setNoData(true)
     }
   }
-
-  // const getTag=(name)=>{
-  //   fetch(`${process.env.REACT_APP_LINK}/tags/${name}/${pageNo}`,{
-  //     method:"GET"
-  //   }).then(async(responce)=>{
-  //     // console.log(responce);
-  //    const data= await responce.json()
-  //    console.log(data);
-      
-  //     navigate('/')
-  //   })
-  // }
   
   useEffect(() => {
      data()

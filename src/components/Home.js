@@ -123,16 +123,16 @@ const Home = () => {
           <div className="row">
             <div className="col-9 my-4 mx-auto">
               <div className="row">
-                <div className="col-10">
+                <div className="col-4">
                   <input type="search" className='form-control mb-3' placeholder='Search Question Here ' value={search} onChange={(e) => setSearch(e.target.value)} />
                 </div>
-                <div className="col-2">
+                <div className="col-1">
                   <button className='btn btn-primary' type='submit' onClick={questionSearch}>Serach</button>
                 </div>
-              </div>
-              <div className="row">
+              
+           
 
-                <div className="col-10">
+                <div className="col-4">
 
                   <select onChange={(e) => setOption(e.target.value)} className='form-control'>
                     <option selected disabled value="">Search By Tag Name</option>
@@ -141,12 +141,14 @@ const Home = () => {
                     }
                   </select>
                 </div>
-                <div className="col-2">
+                <div className="col-1">
 
                   <button className='btn btn-primary' onClick={getTagSearch}>Search</button>
-                </div>
+                  </div>
+                  <div className="col-2">
+                <button className='btn btn-danger'  onClick={getQuestion}>Clear Filter</button>
+                  </div>
               </div>
-                <button className='btn btn-danger mt-4'  onClick={getQuestion}>Clear Filter</button>
               {
                 question.length === 0 ? <h3 style={{ height: "80vh", display: "flex", justifyContent: "center ", alignItems: "center" }} >No Question Available.</h3> :
                   question.map((item, index) => {
@@ -176,7 +178,8 @@ const Home = () => {
           </div>
           <ToastContainer />
         </div>
-        ) : <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        ) :
+         <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
           <CirclesWithBar
             height="100"
             width="100"

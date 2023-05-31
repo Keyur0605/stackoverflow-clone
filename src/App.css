@@ -5,3 +5,9 @@
   
 }
 
+.active{
+  color: #1976d2 !important;
+  transform: scale(1.2);
+  font-weight: 500;
+  border-bottom: 1px solid black;
+}
