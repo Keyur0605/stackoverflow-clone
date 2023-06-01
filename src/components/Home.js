@@ -95,7 +95,7 @@ const Home = () => {
         console.log(error);
       })
     } catch (error) {
-      console.log(error);
+      console.log(error,"error");
     }
   }
   const getTagSearch = (e) => {

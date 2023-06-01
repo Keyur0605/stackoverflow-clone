@@ -10,7 +10,8 @@
     margin: 10px 0px 20px;
     border-radius: 15px 15px 0px 15px;
     background-color: rgb(14, 59, 130);
-    
+    word-wrap:break-word;
+    line-height: 1.8;
 }
 .text li{
     color: white;
@@ -36,6 +37,8 @@
     border-radius: 0px 15px 15px 15px;
     background-color: rgb(41, 41, 41);
     padding: 10px;
+    word-wrap:break-word;
+    line-height: 1.8;
 }
 /* ::placeholder{
     padding-left: 20px;

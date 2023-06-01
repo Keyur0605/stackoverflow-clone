@@ -16,11 +16,9 @@ const Profile = () => {
     const [resetConfirmPassword, setResetConfirmPassword] = useState('')
 
     useEffect(() => {
-        if (!localStorage.getItem("user")) {
-            navigate("/login")
-        }
-
-        else {
+       try {
+        
+      
             const localData = JSON.parse(localStorage.getItem("user"))
             const token = localData.token
             fetch(`${process.env.REACT_APP_LINK}/profile`, {
@@ -49,7 +47,10 @@ const Profile = () => {
             }).catch((error) => {
                 console.log(error);
             })
+        } catch (error) {
+        console.log(error);
         }
+        
     }, [])
 
     const resetPassword = (e) => {

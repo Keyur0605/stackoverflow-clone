@@ -1,11 +1,55 @@
 import React, { useEffect ,useState} from 'react'
 import { NavLink, useNavigate } from 'react-router-dom';
-import { CirclesWithBar } from 'react-loader-spinner'
+import { CirclesWithBar } from 'react-loader-spinner';
+import io from "socket.io-client"
+
 import "./Chat.css"
+
+var socket = io.connect("http://localhost:8000")
 const Chat = () => {
 const navigate=useNavigate()
+const[text,setText]=useState('')
 const[data,setData]=useState()
 const[loader,setLoader]=useState(false)
+const[chatMessage,setChatMessage]=useState([])
+
+
+const localdata=JSON.parse(localStorage.getItem("user"))
+var user_name= localdata.user
+
+const sendMeassge=()=>{
+
+    try {
+      const data={message:text,name:user_name}
+      console.log(data);
+     socket.emit("message",text)
+     setChatMessage((prev)=>{
+      return [...prev,data]
+     })
+     
+   setText('')
+
+    } catch (error) {
+      console.log(error);
+    }
+  
+}
+
+const joinChat=()=>{
+ 
+  if(localStorage.getItem("user")){
+   try {
+     const localdata=JSON.parse(localStorage.getItem("user"))
+     const token= localdata.token
+     socket.emit("joinRoom",token)
+   } catch (error) {
+     console.log(error);
+   }
+ 
+  }
+ }
+
+
     useEffect(() => {
       if (!localStorage.getItem("user")) {
           navigate("/login")
@@ -24,17 +68,49 @@ const[loader,setLoader]=useState(false)
           }).then(async (response) => {
 
               const Data = await response.json()
-              console.log(Data);
               setData(Data)
               setLoader(true)
           }).catch((error) => {
               console.log(error);
               setLoader(false)
           })
+
+          fetch(`${process.env.REACT_APP_LINK}/chat`,{
+            method:"GET", 
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `${token}`
+          }
+          }).then(async(response)=>{
+            // console.log(response,"chat responce");
+            const res = await response.json()
+            console.log(res,"responce");
+            setChatMessage(res)
+          }).catch((error)=>{
+            console.log(error);
+          })
       }
+      const setUpEvent=()=>{
+        socket.on("addmessage",(message,name)=>{
+          const datas= {message,name}
+          console.log(datas,"datas");
+  
+        setChatMessage((prev)=>{
+          return [...prev,datas]
+        })
+  
+        })
+       }
+       setUpEvent()
+       joinChat()
   }, [])
 
+  // useEffect(()=>{
+    
+  // },[])
+
  
+
   return (
     <>
     {loader?<div className='section'>
@@ -42,7 +118,7 @@ const[loader,setLoader]=useState(false)
             <div className="row">
               <div className='mt-3 d-flex' style={{borderBottom:"1px solid gray"}}>
                 {
-                data.picture === ""  ?<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="..." width="55px" height="55px" style={{borderRadius:"50%"}} />:
+                data.picture === ""  ?<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="..." width="55px" height="55px"  style={{borderRadius:"50%"}} />:
                 <img src={data.picture} className='mb-3' alt="profile" style={{borderRadius:"50%"}} width="55px" height="55px" />
                 }
               
@@ -50,35 +126,22 @@ const[loader,setLoader]=useState(false)
                   <h5 style={{color:"white"}} className='text-capitalize mb-0'>{data.name}</h5>
                   <span class="dot"></span><span className='active-button'>Active Now</span>
                 </div>
-               <NavLink to="/" className="ms-auto"><button className='btn btn-primary' style={{height:"38px",marginTop:"12px"}}>Back to Home Page</button></NavLink> 
+             <NavLink to='/' className="ms-auto"><button className='btn btn-primary'  style={{height:"38px",marginTop:"12px"}}>Leave Chat</button></NavLink>
               </div>
              <div className="chat-convertation mt-2 scroll" >
                 <ul className='text'>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                     <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                     <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                    <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-                     <li className='left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem sed officiis voluptas nihil sint illum commodi perferendis. Itaque, repellat. Doloribus minus nesciunt omnis asperiores? Id vero nemo incidunt modi deleniti!</li>
-                    <li className='right'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum at cum culpa consequatur iure mollitia, fuga amet beatae rem error vero corporis quam dolore. Beatae placeat sequi ab nesciunt itaque?</li>
-
+                
+                  {
+                      chatMessage.map((val,index)=>{
+                       const{message,name}=val;
+                        return(
+                          <>
+                          <li  className={name !== user_name?"left":"right"} key={index}>{message} <span className='d-flex justify-content-end' style={{fontSize:"12px"}}>{name}</span></li>
+                         
+                          </>
+                        )
+                      })
+                  }
 
                 </ul>
              </div>
@@ -86,8 +149,8 @@ const[loader,setLoader]=useState(false)
             </div>
             <div >
              <form className='d-flex justify-content-center'>
-             <input type="text" placeholder='Message write here'  className='w-75 mb-3 inputs'/>
-             <button className='btn btn-primary my-3 ms-3' style={{padding:"0px !important"}}>Send</button>
+             <input type="text" placeholder='Message write here'  className='w-75 mb-3 inputs' name='text' value={text} onChange={(e)=>setText(e.target.value)}/>
+             <button type='button' className='btn btn-primary my-3 ms-3' style={{padding:"0px !important"}} onClick={sendMeassge}>Send</button>
              </form>
              </div>
         </div>

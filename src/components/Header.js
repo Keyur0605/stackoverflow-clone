@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { CirclesWithBar } from 'react-loader-spinner'
+import {io} from "socket.io-client"
 import Cookies from 'universal-cookie'
+
+var socket = io.connect("http://localhost:8000")
 const Header = () => {
   const [profiles, setProfiles] = useState()
   const [loader, setLoader] = useState(false)
@@ -47,9 +49,24 @@ const Header = () => {
     }
   }
 
-
+  const joinChat=async()=>{
+ 
+   if(localStorage.getItem("user")){
+    try {
+      const localdata= await JSON.parse(localStorage.getItem("user"))
+      const token=await localdata.token
+      console.log(token,"ghcvjkj")
+      socket.emit("joinRoom",token)
+    } catch (error) {
+      console.log(error);
+    }
+  
+   }
+  }
+  
   useEffect(() => {
     profile()
+    joinChat()
   }, [])
 
   return (
@@ -93,13 +110,12 @@ const Header = () => {
                       <h5 className='text-center mb-3 text-capitalize'>{profiles.name}</h5>
                       <span style={{fontSize:"13px"}}>{profiles.email}</span>
                       <NavLink to="/profile" className="mx-auto mt-3"><button className='btn btn-primary '>Profile</button></NavLink>
-                      <NavLink to="/chat" className="mx-auto"><button className='btn btn-warning mt-3'>Chat</button></NavLink>
+                      <NavLink to="/chat" className="mx-auto"><button className='btn btn-warning mt-3' >Chat</button></NavLink>
                       <button className='btn btn-danger mt-3 ' onClick={logout} >Logout</button>
                     </ul>
                   </div>}
                 </div>
-                : ""
-              : ""}
+                :"":""}
           </div>
         </div>
       </nav>
