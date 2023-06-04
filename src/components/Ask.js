@@ -8,28 +8,31 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function Ask() {
-  const username= JSON.parse(localStorage.getItem("user"))
-  const token=username.token
+ 
   const [image, setImage] = useState('')
   const [addtag, setAddTag] = useState([])
   const [tags, setTags] = useState([])
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const navigate=useNavigate()
-  const data = async () => {
-    let getadat = []
-    const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
-    const response = await api.json()
-    for (let index = 0; index < response.length; index++) {
-      let a = response[index]
-      getadat.push(a.name)
+  useEffect(()=>{
+    if(localStorage.getItem("user")){
+      const data = async () => {
+        let getadat = []
+        const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
+        const response = await api.json()
+        for (let index = 0; index < response.length; index++) {
+          let a = response[index]
+          getadat.push(a.name)
+        }
+        setAddTag(getadat)
+      }
+      data()
     }
-    setAddTag(getadat)
-  }
+  })
+  
 
-  useEffect(() => {
-    data()
-  }, [])
+ 
 
   const imagesAdd = (e) => {
     const render = new FileReader()
@@ -60,6 +63,8 @@ function Ask() {
     
     }
     else {
+      const username= JSON.parse(localStorage.getItem("user"))
+      const token=username.token
       const item = { title, description, image, tags }
       fetch(`${process.env.REACT_APP_LINK}/question/add`, {
         method: "POST",

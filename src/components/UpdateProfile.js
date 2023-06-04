@@ -13,17 +13,7 @@ const UpdateProfile = () => {
     const [gender, setGender] = useState('')
     const [picture, setPicture] = useState('')
     const navigate= useNavigate()
-    const data = async () => {
-        let getadat = []
-        const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
-        const response = await api.json()
-        for (let index = 0; index < response.length; index++) {
-            let a = response[index]
-            getadat.push(a.name)
-        }
-        setAddTag(getadat)
-
-    }
+    
     const imagesAdd = (e) => {
         const render = new FileReader()
         render.readAsDataURL(e.target.files[0]);
@@ -36,35 +26,51 @@ const UpdateProfile = () => {
         }
     }
 
-    const profile= async()=>{
-        try {
-            const localdata = JSON.parse(localStorage.getItem("user"))
-            const token = localdata.token
-            const api = await fetch(`${process.env.REACT_APP_LINK}/profile`, {
-               method: "GET",
-               headers: {
-                   "Content-Type": "application/json",
-                   "Authorization": `${token}`
-               }
-           })
-           const response =  await api.json()
-           console.log(response,"profile data");
-           setName(response.name)
-           setEmail(response.email)
-           setDob(response.dob)
-           setPicture(response.picture)
-           setType(response.type)
-           setGender(response.gender)
-           setTags(response.tags)
-        } catch (error) {
-            console.log(error);
-        }
-   
-    }
+    
 
     useEffect(() => {
-        data()
-        profile()
+
+        if(localStorage.getItem("user")){
+            const data = async () => {
+                let getadat = []
+                const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
+                const response = await api.json()
+                for (let index = 0; index < response.length; index++) {
+                    let a = response[index]
+                    getadat.push(a.name)
+                }
+                setAddTag(getadat)
+        
+            }
+            const profile= async()=>{
+                try {
+                    const localdata = JSON.parse(localStorage.getItem("user"))
+                    const token = localdata.token
+                    const api = await fetch(`${process.env.REACT_APP_LINK}/profile`, {
+                       method: "GET",
+                       headers: {
+                           "Content-Type": "application/json",
+                           "Authorization": `${token}`
+                       }
+                   })
+                   const response =  await api.json()
+                   console.log(response,"profile data");
+                   setName(response.name)
+                   setEmail(response.email)
+                   setDob(response.dob)
+                   setPicture(response.picture)
+                   setType(response.type)
+                   setGender(response.gender)
+                   setTags(response.tags)
+                } catch (error) {
+                    console.log(error);
+                }
+           
+            }
+            data()
+            profile()
+        }
+      
     }, [])
 
     const updateProfile = (e) => {

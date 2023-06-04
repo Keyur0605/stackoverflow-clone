@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {io} from "socket.io-client"
 import Cookies from 'universal-cookie'
-
+import { CirclesWithBar } from "react-loader-spinner";
 var socket = io.connect("http://localhost:8000")
 const Header = () => {
   const [profiles, setProfiles] = useState()
@@ -115,7 +115,22 @@ const Header = () => {
                     </ul>
                   </div>}
                 </div>
-                :"":""}
+                :"":(localStorage.getItem("user")?
+                <CirclesWithBar
+                  height="30"
+                  width="30"
+                  color="#0d6efd"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                  outerCircleColor=""
+                  innerCircleColor=""
+                  barColor=""
+                  ariaLabel="circles-with-bar-loading"
+                />
+                :"")
+                
+              }
           </div>
         </div>
       </nav>

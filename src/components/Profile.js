@@ -107,16 +107,14 @@ const Profile = () => {
                                                 {data.picture === "" ? <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="..." width="200px" height="200px" /> : <img src={data.picture} alt='profile' width="300px" height="400px" />}
                                             </div>
                                             <div className="col-lg-6 px-xl-10">
-                                                <div className="bg-secondary d-lg-inline-block py-3 px-1-9 px-sm-6 mb-1-9 rounded">
-                                                    <h3 className="h2 text-white mb-0">{data.name}</h3>
-
-                                                </div>
+                                              
                                                 <ul className="list-unstyled mb-1-9">
+                                                <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600" >Name:</span> <span className='text-capitalize'>{data.name}</span> </li>
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Email:</span> {data.email}</li>
                                                     <li className="mb-2 mb-xl-3 display-28 text-capitalize"><span className="display-26 text-secondary me-2 font-weight-600 ">Gender:</span > {data.gender}</li>
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Date Of Birth:</span> {dateOfBirth}</li>
                                                     <li className="mb-2 mb-xl-3 display-28"><span className="display-26 text-secondary me-2 font-weight-600">Type:</span> {data.type}</li>
-                                                    <li className="display-28"><span className="display-26 text-secondary me-2 font-weight-600">Tags:</span>{data.tags.map((val, index) => <span className='me-3 profile-home' key={index}>{val.length === 0 ? "" : val}</span>)}</li>
+                                                    <li className="display-28"><span className="display-26 text-secondary me-2 font-weight-600">Tags:</span>{data.tags.map((val, index) => <span className='me-3 profile-home mb-3' key={index}>{val.length === 0 ? "" : val}</span>)}</li>
                                                 </ul>
                                                 <NavLink to="/updateprofile"><button className='btn btn-info me-3 mt-3'>Update Profile</button></NavLink>
                                                 <button className='btn btn-primary mt-3' data-bs-toggle="modal" data-bs-target="#exampleModal" >Reset Password</button>

@@ -16,18 +16,20 @@ const initialValues = {
 const Login = () => {
   const navigate = useNavigate()
   const[loader,setLoader]=useState(false)
+  const[dataLoader,setDataLoader]=useState(false)
   const cookies = new Cookies()
   useEffect(() => {
     if (localStorage.getItem("user")) {
       navigate('/')
     }
   }, [])
-  const { values, handleBlur, touched, handleSubmit, handleChange, errors } = useFormik({
+  const { values, handleBlur, touched, handleSubmit, handleChange, errors,isValid,dirty } = useFormik({
     initialValues: initialValues,
     validationSchema: login,
     onSubmit: (values, action) => {
 
       action.resetForm()
+      setDataLoader(false)
       fetch(`${process.env.REACT_APP_LINK}/login`, {
         method: "POST",
 
@@ -42,6 +44,7 @@ const Login = () => {
           cookies.set('jwt', token.token, { path: ' /' })
           localStorage.setItem(`user`, JSON.stringify({ user, token: token.token }))
           setLoader(true)
+          setDataLoader(true)
           navigate("/")
         }
         else if(response.status === 401){
@@ -97,7 +100,7 @@ const Login = () => {
                 {errors.password && touched.password ? <p style={{ color: "red" }} className='mb-0'>{errors.password}</p> : null}
               </div>
               <div className='d-grid' >
-              <button type="submit" className='btn btn-primary mt-4 d-block '>Sign In</button>
+               {dataLoader? "" : <button type="submit" className='btn btn-primary mt-4 d-block ' disabled={!(isValid && dirty)} >Sign In</button>}
               </div>
             </form>
             <div className='d-flex justify-content-between'>
