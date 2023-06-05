@@ -96,7 +96,7 @@ const Profile = () => {
 
             <Header />
             <div>
-                {show ? <section className="bg-light">
+                {show ? <section className="bg-light section">
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-12 mb-4 mb-sm-5">

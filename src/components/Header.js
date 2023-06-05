@@ -41,6 +41,7 @@ const Header = () => {
         }
       })
       const response = await api.json()
+      console.log(response,"profile response");
       setProfiles(response)
       setLoader(true)
     }
@@ -110,7 +111,7 @@ const Header = () => {
                       <h5 className='text-center mb-3 text-capitalize'>{profiles.name}</h5>
                       <span style={{fontSize:"13px"}}>{profiles.email}</span>
                       <NavLink to="/profile" className="mx-auto mt-3"><button className='btn btn-primary '>Profile</button></NavLink>
-                      <NavLink to="/chat" className="mx-auto"><button className='btn btn-warning mt-3' >Chat</button></NavLink>
+                    <NavLink to="/chat" className="mx-auto"><button className='btn btn-warning mt-3' >Chat</button></NavLink>
                       <button className='btn btn-danger mt-3 ' onClick={logout} >Logout</button>
                     </ul>
                   </div>}

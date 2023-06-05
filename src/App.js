@@ -14,6 +14,7 @@ import Profile from "./components/Profile";
 import UpdateProfile from "./components/UpdateProfile";
 import ForgotPassword from "./components/ForgotPassword";
 import Chat from "./components/Chat";
+import UserProfileData from "./components/UserProfileData";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/login" element={<Login />} />
           <Route path="/tag" element={<Protectrd Cmp={Tag} />} />
+          <Route path="/profile/:data" element={<Protectrd Cmp={UserProfileData} />} />
           <Route path="/ask" element={<Protectrd Cmp={Ask} />} />
           <Route path="/profile" element={<Protectrd Cmp={Profile} />} />
           <Route path="/chat" element={<Protectrd Cmp={Chat} />} />

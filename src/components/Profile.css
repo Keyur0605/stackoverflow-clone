@@ -17,7 +17,7 @@
     border-radius: 0.25rem;
 }
 
-section {
+.section {
    display: flex;
    height: 93vh;
    align-items: center;

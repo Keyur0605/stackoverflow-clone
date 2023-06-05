@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NavLink } from 'react-router-dom';
 
+
 const Home = () => {
   const [value, setValue] = useState([])
   const [option, setOption] = useState()
@@ -32,6 +33,7 @@ const Home = () => {
     }
   }
 
+ 
   const data = async () => {
     try {
       const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
