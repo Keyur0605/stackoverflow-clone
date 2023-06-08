@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { CirclesWithBar } from 'react-loader-spinner';
 import io from "socket.io-client"
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 import "./Chat.css"
 
@@ -18,27 +17,30 @@ const Chat = () => {
   const [adminRoom, setAdminRoom] = useState('')
   const [admin, setAdmin] = useState()
   const [userList, setUserList] = useState([])
-  // const[groupReload,setGroupReload]=useState(false)
+  const[privateGroup,setPrivateGroup]=useState(false)
   if (localStorage.getItem("user")) {
     const localdata = JSON.parse(localStorage.getItem("user"))
     var user_name = localdata.user
     var token = localdata.token
-
+    
   }
   
-  const sendMeassge = () => {
+  const Private=(name)=>{
+    socket.emit("joinPrivateRoom",token,name)
+  }
+
+  const sendMeassge = (userName) => {
     if (!localStorage.getItem("user")) {
       navigate("/login")
     }
     else {
       try {
         const data = { message: text, name: user_name }
-        socket.emit("message", data.name, text, adminRoom)
-        setChatMessage((prev) => {
-          return [...prev, data]
-
-        })
-        setText('')
+          socket.emit("message", data.name, text, adminRoom)
+          setChatMessage((prev) => {
+            return [...prev, data]
+          })
+          setText('')
       } catch (error) {
         console.log(error,"error");
       }
@@ -53,15 +55,23 @@ const Chat = () => {
       try {
         const localdata = JSON.parse(localStorage.getItem("user"))
         const token = localdata.token
-        if (data.admin === true) {
           socket.emit("joinRoom", token, adminRoom)
-        }
-        else {
-          socket.emit("joinRoom", token)
-        }
       } catch (error) {
         console.log(error,"error");
-        // navigate("/servererror")
+      }
+
+    }
+  }
+
+  const joinPrivate=()=>{
+    if (localStorage.getItem("user")) {
+      try {
+        const localdata = JSON.parse(localStorage.getItem("user"))
+        const token = localdata.token
+          socket.emit("joinPrivateRoom2", token)
+          navigate("/privatechatuser")
+      } catch (error) {
+        console.log(error,"error");
       }
 
     }
@@ -86,7 +96,6 @@ const Chat = () => {
           }).then(async (response) => {
   
             const Data = await response.json()
-            console.log(Data,"data");
             setData(Data)
             setAdminRoom(Data.type)
             setAdmin(Data.admin)
@@ -193,7 +202,6 @@ const Chat = () => {
   })
 
   const blockUser = async (userName) => {
-    // console.log(userName,"user name block");
     try {
       fetch(`${process.env.REACT_APP_LINK}/chat/block/${userName}/${adminRoom}`, {
         method: "PATCH",
@@ -223,8 +231,12 @@ console.log(error,"error");
     }
   }
 
-
-
+  socket.on("isPrivateGroup",(bol)=>{
+    setPrivateGroup(bol)
+    
+    
+  })
+ 
   return (
     <>
       {loader ?
@@ -237,7 +249,7 @@ console.log(error,"error");
 
                
                 {admin ? <h4 className='text-center my-4 ' style={{ color: "white",fontSize:"27px",lineHeight:"1.5" }}>User List</h4> : ""}
-                <div style={{borderBottom:"1px solid gray"}}/>
+                {admin ? <div style={{borderBottom:"1px solid gray"}}/>:""}
                 
                 {
                   admin && userList.length !== 0 ? userList.map((val, index) => {
@@ -248,7 +260,7 @@ console.log(error,"error");
                         {val.name !== user_name ? 
                         <div className='row px-4 pt-3' key={index}>
                           <div className="col-lg-8 col-md-7 col-6 ">
-                         <NavLink to={`/profile/${val.name}`} style={{ textDecoration: "none" }}> <p style={{ color: "white" }} className='mt-2 '>{val.name}</p></NavLink>
+                        <NavLink to={`/privatechat/${val.name}`}>  <p style={{ color: "white" }} className='mt-2 ' onClick={()=>Private(val.name)}>{val.name}</p></NavLink> 
                           </div>
                            <div className="col-lg-4 col-md-5 col-6">
                            <button type='button' className={val.block ? "btn btn-success " : "btn btn-danger "} onClick={() => blockUser(val.name)}>{val.block ? "Unblock" : "Block"}</button>
@@ -287,6 +299,7 @@ console.log(error,"error");
                           <option>Non IT Field</option>
                           <option>Other</option>
                         </select> : ""}
+                        {!admin && privateGroup === true ?<button className='btn btn-success me-3' style={{ height: "45px", marginTop: "12px", width: "130px" }} onClick={()=>joinPrivate()}>Private Chat</button> :""}
                       <NavLink to='/' className="mb-3"><button className='btn btn-primary ' style={{ height: "45px", marginTop: "12px", width: "130px" }}>Leave Chat</button></NavLink>
 
                     </div>
@@ -322,7 +335,6 @@ console.log(error,"error");
             </div>
 
           </div>
-          <ToastContainer />
         </div>
         :
         <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>

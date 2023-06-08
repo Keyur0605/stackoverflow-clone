@@ -42,7 +42,6 @@ const Header = () => {
         }
       })
       const response = await api.json()
-      console.log(response,"profile response");
       setProfiles(response)
       setLoader(true)
       } catch (error) {
@@ -62,7 +61,6 @@ const Header = () => {
     try {
       const localdata= await JSON.parse(localStorage.getItem("user"))
       const token=await localdata.token
-      console.log(token,"ghcvjkj")
       socket.emit("joinRoom",token)
     } catch (error) {
       console.log(error);
@@ -107,7 +105,7 @@ const Header = () => {
             {loader ?
               localStorage.getItem("user") ?
                 <div className=''>
-                  <div class="profile" style={{position:"relative"}} onClick={()=>setData(!data)}>
+                  <div className="profile" style={{position:"relative"}} onClick={()=>setData(!data)}>
                    {
                     profiles.picture === ""? <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="..." width="45px" height="45px" style={{borderRadius:"60%"}}   /> :<img src={profiles.picture} alt='' width="45px" height="45px" style={{borderRadius:"60%"}}/>
                    }

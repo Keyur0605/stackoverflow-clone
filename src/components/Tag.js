@@ -11,8 +11,6 @@ const Tag = () => {
       const api = await fetch(`${process.env.REACT_APP_LINK}/tags`)
       const response = await api.json()
       setTags(response)
-      console.log(response);
-      
     } 
     catch (error) {
       console.log(error);
@@ -35,7 +33,7 @@ const Tag = () => {
                 const {name,description}=val
                 return (
                   <>
-                  <div className="col-3 mx-auto my-3" key={index+1}>
+                  <div className="col-3 mx-auto my-3" key={index}>
                     <div className="card" style={{width:"18rem"}}>
                       <div className="card-body">
                       <h6 className="card-title" style={{background:"#e1ecf4",display:"inline-block",padding:"10px",borderRadius:"10px",color:"#39739d",cursor:"pointer"}}>{name}</h6>

@@ -1,10 +1,12 @@
 import React,{useState} from 'react'
-import {  NavLink } from 'react-router-dom'
+import {  NavLink,useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
+import io from "socket.io-client"
 import "./Ask.css"
 import "./Profile.css"
+var socket = io.connect("http://localhost:8000")
 const ProfileCard = (props) => {
-    console.log(props.name,"props");
+    const navigate=useNavigate()
     const [resetpassword, setResetPassword] = useState('')
     const [resetConfirmPassword, setResetConfirmPassword] = useState('')
      const resetPassword = (e) => {
@@ -43,6 +45,15 @@ const ProfileCard = (props) => {
                  console.log(error);
              })
          }
+     }
+
+     const privateChat=(name)=>{
+        if(localStorage.getItem("user")){
+            const localdata = JSON.parse(localStorage.getItem("user"))
+                 const token = localdata.token
+            socket.emit("joinPrivateRoom",token,name)
+            navigate('/privatechat')
+        }
      }
   return (
     <div>
@@ -89,7 +100,7 @@ const ProfileCard = (props) => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div></>: <><button className='btn btn-primary'>{props.message}</button>  <NavLink to="/chat"><button className='btn btn-warning'>Back To Chat</button></NavLink></>}
+                                                </div></>: <><button className='btn btn-primary' onClick={()=>privateChat(props.name)}>{props.message}</button>  <NavLink to="/chat"><button className='btn btn-warning'>Back To Chat</button></NavLink></>}
                                             </div>
                                         </div>
 

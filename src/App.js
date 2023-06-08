@@ -14,8 +14,9 @@ import Profile from "./components/Profile";
 import UpdateProfile from "./components/UpdateProfile";
 import ForgotPassword from "./components/ForgotPassword";
 import Chat from "./components/Chat";
-import UserProfileData from "./components/UserProfileData";
 import ServerError from "./components/serverError";
+import PrivateChatAdmin from "./components/PrivateChatAdmin";
+import PrivateChatUser from "./components/PrivateChatUser";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -32,10 +33,11 @@ function App() {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/login" element={<Login />} />
           <Route path="/tag" element={<Protectrd Cmp={Tag} />} />
-          <Route path="/profile/:datas" element={<Protectrd Cmp={UserProfileData} />} />
           <Route path="/ask" element={<Protectrd Cmp={Ask} />} />
           <Route path="/profile" element={<Protectrd Cmp={Profile} />} />
           <Route path="/chat" element={<Protectrd Cmp={Chat} />} />
+          <Route path="/privatechat/:name" element={<Protectrd Cmp={PrivateChatAdmin} />} />
+          <Route path="/privatechatuser" element={<Protectrd Cmp={PrivateChatUser} />} />
           <Route path="/forgotpassword" element={<ForgotPassword/>} />
           <Route
             path="/updateprofile"

@@ -384,7 +384,6 @@ const SingleQuestion = () => {
                   /></div>
             }
 
-            {/* <NavLink style={{ textDecoration: "none" }} to="/" ><button className='btn btn-primary mb-3 mx-auto'>Back To Home Page</button></NavLink> */}
           </div>
         </div>
       </div>

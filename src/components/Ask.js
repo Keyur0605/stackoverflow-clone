@@ -133,7 +133,7 @@ function Ask() {
                   <h3>Body</h3>
                   <span>Include All The Information About Question</span>
                   <div className="mb-4 mt-2">
-                    <textarea class="form-control" name='description' value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Description About The Question' rows="3"></textarea>
+                    <textarea className="form-control" name='description' value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Description About The Question' rows="3"></textarea>
                     
                   </div>
                   <div className="mb-3">

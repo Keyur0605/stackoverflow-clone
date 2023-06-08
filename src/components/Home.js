@@ -144,24 +144,12 @@ const navigate = useNavigate()
                 <div className="col-md-1 col-2 ">
                   <button className='btn btn-primary' type='submit' onClick={questionSearch}>Serach</button>
                 </div>
-                {/* <div className="col-lg-4 col-8">
-
-                  <select onChange={(e) => setOption(e.target.value)} className='form-control'>
-                    <option selected disabled value="">Search By Tag Name</option>
-                    {
-                      value.map((val, index) => <option key={index}>{val.name}</option>)
-                    }
-                  </select>
-                </div>
-                <div className="col-1">
-                  <button className='btn btn-primary' onClick={getTagSearch}>Search</button>
-                  </div> */}
                 <div className="col-xl-3 col-lg-2 col-8 mx-auto">
-                  <div class="dropdown">
-                    <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <div className="dropdown">
+                    <button className="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Search By Tag Name
                     </button>
-                    <ul class="dropdown-menu " style={{}}>
+                    <ul className="dropdown-menu " style={{}}>
                       <select onChange={(e) => setOption(e.target.value)} className='form-control mb-3'>
                         <option selected disabled value="">Search By Tag Name</option>
                         {
