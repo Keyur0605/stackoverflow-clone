@@ -237,7 +237,7 @@ const SingleQuestion = () => {
                   <p style={{ fontSize: "30px" }} className='text-capitalize'>{questionData.data.title}</p>
                   <label className='mb-1 username' >Question Description</label>
                   <p className='text-capitalize'>{questionData.data.description}</p>
-                  <img src={questionData.data.image} alt='code' width="700px" />
+                  <img src={questionData.data.image} alt='code' style={{maxWidth:"100%"}} />
                   <div className='mt-3' >
 
                     {

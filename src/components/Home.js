@@ -4,7 +4,7 @@ import { CirclesWithBar } from 'react-loader-spinner'
 import "./Ask.css"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
@@ -16,7 +16,7 @@ const Home = () => {
   const [question, setQuestion] = useState([])
   const [totalPage, setTotalPage] = useState('')
   const [search, setSearch] = useState('')
-
+const navigate = useNavigate()
   const prevpage = (e) => {
     e.preventDefault()
     if (pageno >= 2) {
@@ -41,6 +41,7 @@ const Home = () => {
       setValue(response)
     } catch (error) {
       console.log(error);
+      navigate("/servererror")
     }
 
   }
@@ -61,6 +62,7 @@ const Home = () => {
     } catch (error) {
       setLoader(false)
       console.log(error);
+      navigate("/servererror")
     }
 
   }

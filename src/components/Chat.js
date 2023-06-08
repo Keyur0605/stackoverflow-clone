@@ -25,7 +25,7 @@ const Chat = () => {
     var token = localdata.token
 
   }
-
+  
   const sendMeassge = () => {
     if (!localStorage.getItem("user")) {
       navigate("/login")
@@ -40,7 +40,7 @@ const Chat = () => {
         })
         setText('')
       } catch (error) {
-        console.log(error);
+        console.log(error,"error");
       }
 
     }
@@ -60,7 +60,8 @@ const Chat = () => {
           socket.emit("joinRoom", token)
         }
       } catch (error) {
-        console.log(error);
+        console.log(error,"error");
+        // navigate("/servererror")
       }
 
     }
@@ -73,25 +74,33 @@ const Chat = () => {
     else {
       const Profile = () => {
         setLoader(false)
-        const localdata = JSON.parse(localStorage.getItem("user"))
-        const token = localdata.token
-        fetch(`${process.env.REACT_APP_LINK}/profile`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `${token}`
-          }
-        }).then(async (response) => {
-
-          const Data = await response.json()
-          setData(Data)
-          setAdminRoom(Data.type)
-          setAdmin(Data.admin)
-          setLoader(true)
-        }).catch((error) => {
-          console.log(error);
-
-        })
+        try {
+          const localdata = JSON.parse(localStorage.getItem("user"))
+          const token = localdata.token
+          fetch(`${process.env.REACT_APP_LINK}/profile`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `${token}`
+            }
+          }).then(async (response) => {
+  
+            const Data = await response.json()
+            console.log(Data,"data");
+            setData(Data)
+            setAdminRoom(Data.type)
+            setAdmin(Data.admin)
+            setLoader(true)
+          }).catch((error) => {
+            console.log(error);
+            navigate("/servererror")
+  
+          })
+        } catch (error) {
+          console.log(error,"error");
+          navigate("/servererror")
+        }
+       
       }
       const setUpEvent = () => {
         socket.on("addmessage", (message, name) => {
@@ -137,25 +146,13 @@ const Chat = () => {
             setChatLoader(false)
           })
         } catch (error) {
-          console.log(error);
+          console.log(error,"error");
+          navigate("/servererror")
         }
 
       }
       if (admin) {
         try {
-          // const userList = async () => {
-          //   const api = await fetch(`${process.env.REACT_APP_LINK}/chat/userlist/${adminRoom}`, {
-          //     method: "GET",
-          //     headers: {
-          //       "Content-Type": "application/json",
-          //       "Authorization": `${token}`
-          //     }
-          //   })
-          //   const response = await api.json()
-          //   console.log(response,"user list ");
-          //   setUserList(response)
-          //   setLoader(true)
-          // }
           const userList = () => {
             fetch(`${process.env.REACT_APP_LINK}/chat/userlist/${adminRoom}`, {
               method: "GET",
@@ -165,8 +162,6 @@ const Chat = () => {
               }
             }).then(async(response)=>{
                 if(response.status === 204){
-                //  window.location.reload(true)
-                
                 setChatLoader(false)
                 }
                 const res = await response.json()
@@ -179,7 +174,7 @@ const Chat = () => {
           }
           userList()
         } catch (error) {
-          console.log(error);
+          console.log(error,"error");
         }
       }
       chat()
@@ -191,10 +186,15 @@ const Chat = () => {
 
   }, [adminRoom])
 
+  socket.on("block",(name)=>{
+    if(user_name === name){
+      navigate("/")
+    }
+  })
+
   const blockUser = async (userName) => {
     // console.log(userName,"user name block");
     try {
-
       fetch(`${process.env.REACT_APP_LINK}/chat/block/${userName}/${adminRoom}`, {
         method: "PATCH",
         headers: {
@@ -202,12 +202,16 @@ const Chat = () => {
           "Authorization": `${token}`
         }
       }).then(async (response) => {
-        console.log(response,"profile block response");
         if (response.status === 204) {
-          socket.emit("blockuser", userName, adminRoom);
           const updateBlock = userList.map((val) => {
             if (val.name === userName) {
-              return { ...val, block: true };
+              if(val.block === false){
+                socket.emit("blockuser", userName);
+                return { ...val, block: true };
+              }
+              else{
+                return { ...val, block: false };
+              }
             }
             return val
           })
@@ -215,7 +219,7 @@ const Chat = () => {
         }
       })
     } catch (error) {
-
+console.log(error,"error");
     }
   }
 
@@ -228,7 +232,7 @@ const Chat = () => {
           <div className="container-fluid ">
             <div className="row">
              
-              <div className="col-2 p-0"  style={{background:"#242124"}}>
+              <div className="col-md-2 col-12 p-0"  style={{background:"#242124"}}>
                 <section className='mt-4'>
 
                
@@ -243,10 +247,10 @@ const Chat = () => {
                   
                         {val.name !== user_name ? 
                         <div className='row px-4 pt-3' key={index}>
-                          <div className="col-8 ">
+                          <div className="col-lg-8 col-md-7 col-6 ">
                          <NavLink to={`/profile/${val.name}`} style={{ textDecoration: "none" }}> <p style={{ color: "white" }} className='mt-2 '>{val.name}</p></NavLink>
                           </div>
-                           <div className="col-4">
+                           <div className="col-lg-4 col-md-5 col-6">
                            <button type='button' className={val.block ? "btn btn-success " : "btn btn-danger "} onClick={() => blockUser(val.name)}>{val.block ? "Unblock" : "Block"}</button>
                            </div>
                         
@@ -262,7 +266,7 @@ const Chat = () => {
                 }
                  </section>
               </div>
-              <div className="col-10">
+              <div className="col-md-10 col-12">
                 <div className="row">
                   <div className='mt-3 d-flex' style={{ borderBottom: "1px solid gray" }}>
                     {
@@ -281,6 +285,7 @@ const Chat = () => {
                           <option>Backend Developer</option>
                           <option>Tester</option>
                           <option>Non IT Field</option>
+                          <option>Other</option>
                         </select> : ""}
                       <NavLink to='/' className="mb-3"><button className='btn btn-primary ' style={{ height: "45px", marginTop: "12px", width: "130px" }}>Leave Chat</button></NavLink>
 

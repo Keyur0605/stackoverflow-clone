@@ -31,7 +31,8 @@ const Header = () => {
 
   const profile = async () => {
     if (localStorage.getItem("user")) {
-      const data = JSON.parse(localStorage.getItem("user"));
+      try {
+        const data = JSON.parse(localStorage.getItem("user"));
       const token = data.token
       const api = await fetch(`${process.env.REACT_APP_LINK}/profile`, {
         method: "GET",
@@ -44,6 +45,11 @@ const Header = () => {
       console.log(response,"profile response");
       setProfiles(response)
       setLoader(true)
+      } catch (error) {
+        console.log(error);
+        // navigate("/servererror")
+      }
+      
     }
     else {
       
@@ -108,10 +114,10 @@ const Header = () => {
                     </div>
                     {data &&<div className='profile-card'>
                     <ul >
-                      <h5 className='text-center mb-3 text-capitalize'>{profiles.name}</h5>
-                      <span style={{fontSize:"13px"}}>{profiles.email}</span>
+                      <h5 className='text-center mb-2 text-capitalize'>{profiles.name}</h5>
+                      <span style={{fontSize:"13px"}} className='text-center'>{profiles.email}</span>
                       <NavLink to="/profile" className="mx-auto mt-3"><button className='btn btn-primary '>Profile</button></NavLink>
-                    <NavLink to="/chat" className="mx-auto"><button className='btn btn-warning mt-3' >Chat</button></NavLink>
+                {profiles.block? <p className='mb-0 my-2' style={{fontWeight:"700"}}>You are Block by Admin <br /> you can't access Chat</p> :<NavLink to="/chat" className="mx-auto"><button className='btn btn-warning mt-3'>Chat</button></NavLink>}
                       <button className='btn btn-danger mt-3 ' onClick={logout} >Logout</button>
                     </ul>
                   </div>}

@@ -17,8 +17,9 @@ function Ask() {
   const navigate=useNavigate()
   useEffect(()=>{
     if(localStorage.getItem("user")){
-      const data = async () => {
-        let getadat = []
+      try {
+          const data = async () => {
+          let getadat = []
         const api = await fetch(`${process.env.REACT_APP_LINK}/tags/name`)
         const response = await api.json()
         for (let index = 0; index < response.length; index++) {
@@ -28,6 +29,11 @@ function Ask() {
         setAddTag(getadat)
       }
       data()
+        } catch (error) {
+          console.log(error);
+          navigate("/servererror")
+        }
+        
     }
   })
   
@@ -94,6 +100,7 @@ function Ask() {
 
       }).catch((error) => {
         console.log(error);
+        navigate("/servererror")
       })
     }
 

@@ -1,24 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, NavLink } from 'react-router-dom'
 import { CirclesWithBar } from 'react-loader-spinner';
-import { ToastContainer, toast } from 'react-toastify';
-import "./Ask.css"
-import "./Profile.css"
+import ProfileCard from './ProfileCard'
 import Header from './Header'
 
 const Profile = () => {
-    const navigate = useNavigate()
     const [data, setData] = useState('')
-    const [show, setShow] = useState(false)
-    const [dateOfBirth, setDateOfBrith] = useState('')
-    const [date, setDate] = useState('')
-    const [resetpassword, setResetPassword] = useState('')
-    const [resetConfirmPassword, setResetConfirmPassword] = useState('')
-
+    const [show,setShow] = useState(false)
     useEffect(() => {
        try {
-        
-      
             const localData = JSON.parse(localStorage.getItem("user"))
             const token = localData.token
             fetch(`${process.env.REACT_APP_LINK}/profile`, {
@@ -31,18 +20,7 @@ const Profile = () => {
 
                 const Data = await response.json()
                 setData(Data)
-                setDateOfBrith(Data.dob)
-                // if (dateOfBirth !== "") {
-                //     let array1 = dateOfBirth.split('')
-                //     let array2 = array1.splice(0, 10)
-                //     let Birthday = array2.join('');
-                //     setDate(Birthday)
-                //     setShow(true)
-                // }
-                // else{
-                //     setShow(true)
-                // }
-                // console.log(date,"birth date");
+                console.log(data,"data ");
                 setShow(true)
             }).catch((error) => {
                 console.log(error);
@@ -53,49 +31,13 @@ const Profile = () => {
         
     }, [])
 
-    const resetPassword = (e) => {
-        e.preventDefault()
 
-        if (resetpassword !== resetConfirmPassword) {
-            alert("password does not match")
-        }
-        else if (resetpassword === "" || resetConfirmPassword === "") {
-            toast.error('Please Fill Password Details', {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
-        }
-        else {
-            const item = { resetpassword }
-            console.log(item);
-            const localdata = JSON.parse(localStorage.getItem("user"))
-            const token = localdata.token
-            fetch(`${process.env.REACT_APP_LINK}/resetpassword`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${token}`
-                },
-                body: JSON.stringify(item)
-            }).then((response) => {
-                console.log(response);
-            }).catch((error) => {
-                console.log(error);
-            })
-        }
-    }
 
     return (
         <>
 
             <Header />
-            <div>
+            {/* <div>
                 {show ? <section className="bg-light section">
                     <div className="container">
                         <div className="row">
@@ -168,7 +110,20 @@ const Profile = () => {
                 }
 
 
-            </div>
+            </div> */}
+            { show ? <ProfileCard  name={data.name} picture={data.picture} email={data.email} gender={data.gender} dob={data.dob} type={data.type} tags={data.tags} update="Update Profile"  reset="Reset Password"/> : <div style={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <CirclesWithBar
+              height="100"
+              width="100"
+              color="#0d6efd"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              outerCircleColor=""
+              innerCircleColor=""
+              barColor=""
+              ariaLabel='circles-with-bar-loading'
+            /></div>}
         </>
     )
 }
