@@ -55,7 +55,6 @@ const leaveChat=()=>{
   navigate("/chat")
 }
 
-
   return (
     <>
       {/* {loader ? */}
